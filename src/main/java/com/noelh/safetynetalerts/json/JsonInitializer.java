@@ -1,9 +1,13 @@
 package com.noelh.safetynetalerts.json;
 
+import com.jsoniter.JsonIterator;
+import com.noelh.safetynetalerts.json.jsonparser.Parser;
+import com.noelh.safetynetalerts.json.jsonparser.ParserJson;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
+
 
 @Component
 public class JsonInitializer implements CommandLineRunner {
@@ -13,6 +17,8 @@ public class JsonInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         JsonManagement jsonManagement = JsonManagement.getInstance();
-        System.out.println(jsonManagement.loadJsonData(jsonDataFile));
+        jsonManagement.loadJsonData(jsonDataFile);
+        ParserJson rawData = JsonIterator.deserialize(jsonManagement.getJsonData(), ParserJson.class);
+        Parser data = jsonManagement.dataConverter(rawData);
     }
 }
