@@ -20,5 +20,6 @@ public class JsonInitializer implements CommandLineRunner {
         jsonManagement.loadJsonData(jsonDataFile);
         ParserJson rawData = JsonIterator.deserialize(jsonManagement.getJsonData(), ParserJson.class);
         Parser data = jsonManagement.dataConverter(rawData);
+        System.out.println(data.getFirestations());
     }
 }

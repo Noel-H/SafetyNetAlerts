@@ -8,5 +8,5 @@ import java.util.List;
 public class Parser {
     private List<Person> persons;
     private List<FireStation> firestations;
-    private List<MedicalRecord> medicalrecords;
+    //private List<MedicalRecord> medicalrecords;
 }
