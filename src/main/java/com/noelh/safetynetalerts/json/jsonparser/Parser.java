@@ -6,7 +6,10 @@ import java.util.List;
 
 @Data
 public class Parser {
+
     private List<Person> persons;
+
     private List<FireStation> firestations;
+
     //private List<MedicalRecord> medicalrecords;
 }

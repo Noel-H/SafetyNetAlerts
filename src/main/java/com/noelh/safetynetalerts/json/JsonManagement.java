@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class JsonManagement {
     private static JsonManagement instance;
@@ -42,8 +43,61 @@ public class JsonManagement {
         Parser data = new Parser();
         data.setPersons(personListFilter2(rawData));
         data.setFirestations(fireStationListFilter2(rawData));
+        //data.setFirestations(fireStationListFilter2StreamAlternative(rawData.getFirestations()));
         //data.setMedicalrecords(medicalRecordListFilter(rawData));
         return data;
+    }
+
+    private List<FireStation> fireStationListFilter2Alternative(List<FireStationJson> rawData) {
+        // Passer d'une liste d'associations station/address à une liste de stations unique
+        List<FireStation> fireStations = new ArrayList<>();
+        for (FireStationJson elemJson : rawData) {
+            // Vérifier que la station de elem existe dans fireStations
+            boolean alreadyHere = false;
+            for (FireStation elem : fireStations) {
+                if (elem.getStation() == Integer.parseInt(elemJson.getStation())) {
+                    alreadyHere = true;
+                }
+            }
+            if (!alreadyHere) {
+                FireStation f = new FireStation();
+                f.setStation(Integer.parseInt(elemJson.getStation()));
+                f.setAddress(new ArrayList<>());
+                fireStations.add(f);
+            }
+        }
+        // Remplir les stations unique des addresses associées
+        for (FireStation fireStation : fireStations) {
+            for (FireStationJson fireStationJson : rawData) {
+                if (Integer.parseInt(fireStationJson.getStation()) == fireStation.getStation()) {
+                    fireStation.getAddress().add(fireStationJson.getAddress());
+                }
+            }
+        }
+        return fireStations;
+    }
+
+    private List<FireStation> fireStationListFilter2StreamAlternative(List<FireStationJson> rawData) {
+        // Passer d'une liste d'associations station/address à une liste de stations unique
+        List<FireStation> fireStations = rawData
+                .stream()
+                .map(fireStationJson -> {
+                    FireStation f = new FireStation();
+                    f.setStation(Integer.parseInt(fireStationJson.getStation()));
+                    return f;
+                })
+                .distinct()
+                .collect(Collectors.toList());
+        // Remplir les stations unique des addresses associées
+        fireStations.forEach(fireStation -> {
+            fireStation.setAddress(rawData
+                    .stream()
+                    .filter(fireStationJson -> Integer.parseInt(fireStationJson.getStation()) == fireStation.getStation())
+                    .map(fireStationJson -> fireStationJson.getAddress())
+                    .distinct()
+                    .collect(Collectors.toList()));
+        });
+        return fireStations;
     }
 
     private List<FireStation> sortFireStationList(List<FireStation> filteredFireStationList) {
