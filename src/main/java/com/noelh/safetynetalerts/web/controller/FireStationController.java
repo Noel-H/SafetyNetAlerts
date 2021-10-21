@@ -66,13 +66,13 @@ public class FireStationController {
         }
     }
 
-    @DeleteMapping("/{id}/adress")
+    @DeleteMapping("/{id}/address")
     public ResponseEntity<FireStation> deleteFireStationAddress(@PathVariable("id") Long id, @RequestBody FireStationDeleteAdressRequest fireStationDeleteAdressRequest) {
-        log.info("DELETE /firestations/" + id + "/adress : " +fireStationDeleteAdressRequest.getAddress());
+        log.info("DELETE /firestations/" + id + "/address : " +fireStationDeleteAdressRequest.getAddress());
         try {
             return ResponseEntity.ok(fireStationService.deleteFireStationAddress(fireStationService.getFirestation(id), fireStationDeleteAdressRequest.getAddress()));
         } catch (NoSuchElementException e) {
-            log.error("DELETE /firestations/" + id +"/adress : " +fireStationDeleteAdressRequest.getAddress() +" - ERROR : " + e.getMessage());
+            log.error("DELETE /firestations/" + id +"/address : " +fireStationDeleteAdressRequest.getAddress() +" - ERROR : " + e.getMessage());
             return ResponseEntity.notFound().build();
         }
     }

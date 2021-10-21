@@ -7,6 +7,7 @@ import com.noelh.safetynetalerts.web.dto.FireStationUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Predicate;
@@ -47,12 +48,13 @@ public class FireStationService {
         FireStation result = FireStation.builder()
                 .id(firestation.getId())
                 .station(firestation.getStation())
+                .address(new ArrayList<>(firestation.getAddress()))
                 .build();
         fireStationRepository.delete(firestation);
         return result;
     }
 
-    public FireStation deleteFireStationAddress(FireStation firestation, String address)throws NoSuchElementException {
+    public FireStation deleteFireStationAddress(FireStation firestation, String address) throws NoSuchElementException {
         if(firestation.getAddress().stream().noneMatch(str -> (str.equals(address)))){
             throw new NoSuchElementException("Address " + address + " not found");
         }else {
