@@ -2,7 +2,6 @@ package com.noelh.safetynetalerts.service;
 
 import com.noelh.safetynetalerts.json.jsonparser.MedicalRecord;
 import com.noelh.safetynetalerts.json.jsonparser.MedicalRecordRepository;
-import com.noelh.safetynetalerts.json.jsonparser.PersonRepository;
 import com.noelh.safetynetalerts.web.dto.MedicalRecordAddRequest;
 import com.noelh.safetynetalerts.web.dto.MedicalRecordUpdateRequest;
 import lombok.extern.slf4j.Slf4j;

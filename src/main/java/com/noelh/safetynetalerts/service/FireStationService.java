@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,23 +18,23 @@ public class FireStationService {
     @Autowired
     private FireStationRepository fireStationRepository;
 
-    public List<FireStation> addFireStations(List<FireStation> firestations) {
-        return fireStationRepository.saveAll(firestations);
+    public List<FireStation> addFireStations(List<FireStation> fireStations) {
+        return fireStationRepository.saveAll(fireStations);
     }
 
-    public List<FireStation> getFirestations() {
+    public List<FireStation> getFireStations() {
         return fireStationRepository.findAll();
     }
 
-    public FireStation getFirestation(long id) throws NoSuchElementException {
+    public FireStation getFireStation(long id) throws NoSuchElementException {
         return fireStationRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("FireStation id " + id + " not found"));
     }
 
-    public FireStation addFireStation(FireStationAddRequest firestation) {
+    public FireStation addFireStation(FireStationAddRequest fireStation) {
         return fireStationRepository.save(FireStation.builder()
-                .station(firestation.getStation())
-                .address(firestation.getAddress())
+                .station(fireStation.getStation())
+                .address(fireStation.getAddress())
                 .build());
     }
 

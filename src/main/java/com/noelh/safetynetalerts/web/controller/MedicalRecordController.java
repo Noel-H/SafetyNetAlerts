@@ -1,9 +1,7 @@
 package com.noelh.safetynetalerts.web.controller;
 
-import com.noelh.safetynetalerts.json.jsonparser.FireStation;
 import com.noelh.safetynetalerts.json.jsonparser.MedicalRecord;
 import com.noelh.safetynetalerts.service.MedicalRecordService;
-import com.noelh.safetynetalerts.service.PersonService;
 import com.noelh.safetynetalerts.web.dto.MedicalRecordAddRequest;
 import com.noelh.safetynetalerts.web.dto.MedicalRecordUpdateRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -74,6 +72,4 @@ public class MedicalRecordController {
             return ResponseEntity.notFound().build();
         }
     }
-
-
 }

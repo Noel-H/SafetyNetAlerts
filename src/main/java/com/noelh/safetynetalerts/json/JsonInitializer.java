@@ -30,7 +30,7 @@ public class JsonInitializer implements CommandLineRunner {
         jsonManagement.loadJsonData(jsonDataFile);
         ParserJson rawData = JsonIterator.deserialize(jsonManagement.getJsonData(), ParserJson.class);
         Parser data = jsonManagement.dataConverter(rawData);
-        fireStationService.addFireStations(data.getFirestations());
+        fireStationService.addFireStations(data.getFireStations());
         personService.addPersons(data.getPersons());
     }
 }

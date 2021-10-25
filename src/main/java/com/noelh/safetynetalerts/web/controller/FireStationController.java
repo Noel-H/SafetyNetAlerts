@@ -3,7 +3,7 @@ package com.noelh.safetynetalerts.web.controller;
 import com.noelh.safetynetalerts.json.jsonparser.FireStation;
 import com.noelh.safetynetalerts.service.FireStationService;
 import com.noelh.safetynetalerts.web.dto.FireStationAddRequest;
-import com.noelh.safetynetalerts.web.dto.FireStationDeleteAdressRequest;
+import com.noelh.safetynetalerts.web.dto.FireStationDeleteAddressRequest;
 import com.noelh.safetynetalerts.web.dto.FireStationUpdateRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +24,14 @@ public class FireStationController {
     @GetMapping("")
     public List<FireStation> getFireStations(){
         log.info("GET /firestations/");
-        return fireStationService.getFirestations();
+        return fireStationService.getFireStations();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<FireStation> getFireStation(@PathVariable("id") Long id){
         log.info("GET /firestations/" +id);
         try {
-            return ResponseEntity.ok(fireStationService.getFirestation(id));
+            return ResponseEntity.ok(fireStationService.getFireStation(id));
         } catch (NoSuchElementException e) {
             log.error("GET /firestations/" + id + " - ERROR : " + e.getMessage());
             return ResponseEntity.notFound().build();
@@ -48,7 +48,7 @@ public class FireStationController {
     public ResponseEntity<FireStation> updateFireStation(@PathVariable("id") Long id,@RequestBody FireStationUpdateRequest fireStationUpdateRequest){
         log.info("PUT /firestations/" + id);
         try {
-            return ResponseEntity.ok(fireStationService.updateFireStation(fireStationService.getFirestation(id), fireStationUpdateRequest));
+            return ResponseEntity.ok(fireStationService.updateFireStation(fireStationService.getFireStation(id), fireStationUpdateRequest));
         } catch (NoSuchElementException e) {
             log.error("PUT /firestations/" + id + " - ERROR : " + e.getMessage());
             return ResponseEntity.notFound().build();
@@ -59,7 +59,7 @@ public class FireStationController {
     public ResponseEntity<FireStation> deleteFireStation(@PathVariable("id") Long id){
         log.info("DELETE /firestations/" +id);
         try{
-            return ResponseEntity.ok(fireStationService.deleteFireStation(fireStationService.getFirestation(id)));
+            return ResponseEntity.ok(fireStationService.deleteFireStation(fireStationService.getFireStation(id)));
         } catch (NoSuchElementException e) {
             log.error("DELETE /firestations/" + id + " - ERROR : " + e.getMessage());
             return ResponseEntity.notFound().build();
@@ -67,12 +67,12 @@ public class FireStationController {
     }
 
     @DeleteMapping("/{id}/address")
-    public ResponseEntity<FireStation> deleteFireStationAddress(@PathVariable("id") Long id, @RequestBody FireStationDeleteAdressRequest fireStationDeleteAdressRequest) {
-        log.info("DELETE /firestations/" + id + "/address : " +fireStationDeleteAdressRequest.getAddress());
+    public ResponseEntity<FireStation> deleteFireStationAddress(@PathVariable("id") Long id, @RequestBody FireStationDeleteAddressRequest fireStationDeleteAddressRequest) {
+        log.info("DELETE /firestations/" + id + "/address : " + fireStationDeleteAddressRequest.getAddress());
         try {
-            return ResponseEntity.ok(fireStationService.deleteFireStationAddress(fireStationService.getFirestation(id), fireStationDeleteAdressRequest.getAddress()));
+            return ResponseEntity.ok(fireStationService.deleteFireStationAddress(fireStationService.getFireStation(id), fireStationDeleteAddressRequest.getAddress()));
         } catch (NoSuchElementException e) {
-            log.error("DELETE /firestations/" + id +"/address : " +fireStationDeleteAdressRequest.getAddress() +" - ERROR : " + e.getMessage());
+            log.error("DELETE /firestations/" + id +"/address : " + fireStationDeleteAddressRequest.getAddress() +" - ERROR : " + e.getMessage());
             return ResponseEntity.notFound().build();
         }
     }

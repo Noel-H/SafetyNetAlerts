@@ -9,7 +9,5 @@ public class Parser {
 
     private List<Person> persons;
 
-    private List<FireStation> firestations;
-
-    //private List<MedicalRecord> medicalrecords;
+    private List<FireStation> fireStations;
 }

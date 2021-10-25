@@ -54,13 +54,24 @@ public class PersonController {
         }
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Person> deletePerson(@PathVariable("id") Long id){
+        log.info("DELETE /persons/" + id);
+        try {
+            return ResponseEntity.ok(personService.deletePerson(personService.getPerson(id)));
+        } catch (NoSuchElementException e) {
+            log.error("DELETE /persons/" + id +" - ERROR : " + e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @DeleteMapping("")
-    public ResponseEntity<Person> deletePerson(@RequestBody PersonDeleteRequest person){
+    public ResponseEntity<Person> deletePersonByName(@RequestBody PersonDeleteRequest person){
         log.info("DELETE /persons/ : " + person.getFirstName() + " " + person.getLastName());
         try {
             return ResponseEntity.ok(personService.deletePerson(personService.getPerson(person.getFirstName(), person.getLastName())));
         } catch (NoSuchElementException e) {
-            log.error("DELETE /persons/" + " - ERROR : " + e.getMessage());
+            log.error("DELETE /persons/ : " + person.getFirstName() + " " + person.getLastName() + " - ERROR : " + e.getMessage());
             return ResponseEntity.notFound().build();
         }
     }

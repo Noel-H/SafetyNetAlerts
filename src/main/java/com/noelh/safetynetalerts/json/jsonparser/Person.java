@@ -30,4 +30,17 @@ public class Person {
 
     @OneToOne(cascade = CascadeType.ALL)
     private MedicalRecord medicalRecord;
+
+    public Person(Person p) {
+        id = p.id;
+        firstName = p.firstName;
+        lastName = p.lastName;
+        birthdate = p.birthdate;
+        address = p.address;
+        city = p.city;
+        zip = p.zip;
+        phone = p.phone;
+        email = p.email;
+        medicalRecord = new MedicalRecord(p.medicalRecord);
+    }
 }

@@ -1,6 +1,7 @@
 package com.noelh.safetynetalerts.service;
 
 import com.noelh.safetynetalerts.json.jsonparser.MedicalRecord;
+import com.noelh.safetynetalerts.json.jsonparser.MedicalRecordRepository;
 import com.noelh.safetynetalerts.json.jsonparser.Person;
 import com.noelh.safetynetalerts.json.jsonparser.PersonRepository;
 import com.noelh.safetynetalerts.web.dto.PersonAddRequest;
@@ -8,9 +9,9 @@ import com.noelh.safetynetalerts.web.dto.PersonUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class PersonService {
@@ -46,6 +47,10 @@ public class PersonService {
                 .zip(person.getZip())
                 .phone(person.getPhone())
                 .email(person.getEmail())
+                .medicalRecord(MedicalRecord.builder()
+                        .medications(new ArrayList<>())
+                        .allergies(new ArrayList<>())
+                        .build())
                 .build());
     }
 
@@ -74,9 +79,13 @@ public class PersonService {
                 .zip(person.getZip())
                 .phone(person.getPhone())
                 .email(person.getEmail())
+                .medicalRecord(MedicalRecord.builder()
+                        .id(person.getMedicalRecord().getId())
+                        .medications(new ArrayList<>(person.getMedicalRecord().getMedications()))
+                        .allergies(new ArrayList<>(person.getMedicalRecord().getAllergies()))
+                        .build())
                 .build();
         personRepository.delete(person);
         return result;
     }
-
 }
