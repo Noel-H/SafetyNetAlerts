@@ -94,7 +94,7 @@ public class PersonControllerTest {
         Person p = new Person();
         when(personService.getPerson(anyLong())).thenReturn(p);
         when(personService.deletePerson(eq(p))).thenReturn(new Person());
-        //When  je fait un delete sur l'id en question
+        //When je fait un delete sur l'id en question
         mockMvc.perform(delete("/persons/1"))
         //Then je reçois 200
                 .andExpect(status().isOk());
