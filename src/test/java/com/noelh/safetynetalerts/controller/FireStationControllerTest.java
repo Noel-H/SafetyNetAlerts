@@ -3,11 +3,13 @@ package com.noelh.safetynetalerts.controller;
 import com.noelh.safetynetalerts.json.jsonparser.FireStation;
 import com.noelh.safetynetalerts.json.jsonparser.Person;
 import com.noelh.safetynetalerts.service.FireStationService;
+import com.noelh.safetynetalerts.web.controller.FireStationController;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -23,9 +25,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 
-@SpringBootTest
+
 @ExtendWith(MockitoExtension.class)
-@AutoConfigureMockMvc
+@WebMvcTest(controllers = FireStationController.class)
 public class FireStationControllerTest {
 
     @Autowired

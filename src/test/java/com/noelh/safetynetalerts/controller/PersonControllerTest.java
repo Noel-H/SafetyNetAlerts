@@ -2,16 +2,19 @@ package com.noelh.safetynetalerts.controller;
 
 import com.noelh.safetynetalerts.json.jsonparser.Person;
 import com.noelh.safetynetalerts.service.PersonService;
+import com.noelh.safetynetalerts.web.controller.PersonController;
 import com.noelh.safetynetalerts.web.dto.PersonUpdateRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -22,9 +25,9 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+
 @ExtendWith(MockitoExtension.class)
-@AutoConfigureMockMvc
+@WebMvcTest(controllers = PersonController.class)
 public class PersonControllerTest {
 
     @Autowired
@@ -114,7 +117,7 @@ public class PersonControllerTest {
     public void deletePersonByNameTest_shouldReturnOk() throws Exception {
         //Given que j'éssai de supprimer une person dont le nom et prénom existe
         Person p = new Person();
-        when(personService.getPerson(anyString(), anyString())).thenReturn(p);
+        when(personService.getPerson(any(), any())).thenReturn(p);
         when(personService.deletePerson(eq(p))).thenReturn(new Person());
         //When je fais un delete avec le nom et prénom de cette person
         mockMvc.perform(delete("/persons")
@@ -127,9 +130,9 @@ public class PersonControllerTest {
     @Test
     public void deletePersonByNameTest_shouldReturnNotFound() throws Exception {
         //Given que j'éssai de supprimer une person qui n'existe pas avec le nom et prénom
-        when(personService.getPerson(anyString(),anyString())).thenThrow(new NoSuchElementException());
+        when(personService.getPerson(any(),any())).thenThrow(new NoSuchElementException());
         //When je fais un delete avec le nom et prénom de cette person
-        mockMvc.perform(delete("/person")
+        mockMvc.perform(delete("/persons")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}"))
         //Then je reçois un 404

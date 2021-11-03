@@ -26,6 +26,12 @@ public class FireStationService {
         return fireStationRepository.findAll();
     }
 
+    /**
+     * Renvoie la firestation associée à l'id donnée
+     * @param id l'id de la firestation
+     * @return la firestation
+     * @throws NoSuchElementException si il n'y a pas de firestation avec l'id donnée
+     */
     public FireStation getFireStation(long id) throws NoSuchElementException {
         return fireStationRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("FireStation id " + id + " not found"));
