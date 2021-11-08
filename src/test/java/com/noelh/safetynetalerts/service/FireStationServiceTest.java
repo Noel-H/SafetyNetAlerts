@@ -2,21 +2,22 @@ package com.noelh.safetynetalerts.service;
 
 import com.noelh.safetynetalerts.json.jsonparser.FireStation;
 import com.noelh.safetynetalerts.json.jsonparser.FireStationRepository;
-import com.noelh.safetynetalerts.json.jsonparser.Person;
+import com.noelh.safetynetalerts.web.dto.FireStationAddRequest;
+import com.noelh.safetynetalerts.web.dto.FireStationUpdateRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class FireStationServiceTest {
@@ -28,26 +29,10 @@ public class FireStationServiceTest {
     private FireStationService fireStationService;
 
     @Test
-    public void test() {
-        // GIVEN Je veux récuperer une firestation avec un id spécifique
-        FireStation fs = new FireStation();
-        when(fireStationRepository.findById(anyLong())).thenReturn(Optional.of(fs));
-
-        // WHEN J'appelle la méthode en lui donnant un id
-        FireStation result = fireStationService.getFireStation(1L);
-
-        // THEN Je reçois la firestation avec l'id correspondante
-        assertEquals(fs, result);
-    }
-
-    @Test
-    public void testError() {
-        // GIVEN Je veux récuperer une firestation avec un id qui n'existe pas
-        when(fireStationRepository.findById(anyLong())).thenReturn(Optional.empty());
-
-        // WHEN J'appelle la méthode en lui donnant un id
-        // THEN Je reçois une NoSuchElementException
-        assertThrows(NoSuchElementException.class, () -> fireStationService.getFireStation(1L));
+    public void getFireStationsTest_shouldReturnListOfFireStation(){
+        when(fireStationRepository.findAll()).thenReturn(new ArrayList<>());
+        fireStationService.getFireStations();
+        verify(fireStationRepository, times(1)).findAll();
     }
 
     @Test
@@ -63,5 +48,24 @@ public class FireStationServiceTest {
         when(fireStationRepository.findById(1L)).thenReturn(Optional.empty());
         assertThrows(NoSuchElementException.class, () -> fireStationService.getFireStation(1));
 
+    }
+
+    @Test
+    public void addFireStationTest_shouldReturnFireStation(){
+        FireStation fs = new FireStation();
+        FireStationAddRequest fsA = new FireStationAddRequest();
+        when(fireStationRepository.save(any())).thenReturn(fs);
+        fireStationService.addFireStation(fsA);
+        verify(fireStationRepository, times(1)).save(any());
+    }
+
+    @Test
+    public void updateFireStation_shouldReturnFireStation(){
+        FireStation fs = new FireStation();
+        FireStation fsUpdated = new FireStation();
+        FireStationUpdateRequest fsUR = new FireStationUpdateRequest();
+        when(fireStationRepository.save(any())).thenReturn(fsUpdated);
+        fireStationService.updateFireStation(fs, fsUR);
+        verify(fireStationRepository, times(1)).save(any());
     }
 }

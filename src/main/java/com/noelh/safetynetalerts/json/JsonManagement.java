@@ -10,18 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class JsonManagement {
-    private static JsonManagement instance;
 
     private String jsonData="";
-
-    public static JsonManagement getInstance(){
-        if (instance == null){
-            instance = new JsonManagement();
-        }
-        return instance;
-    }
-
-    private JsonManagement(){}
 
     public String getJsonData() {
         return jsonData;

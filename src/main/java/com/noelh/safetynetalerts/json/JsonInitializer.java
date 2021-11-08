@@ -26,7 +26,7 @@ public class JsonInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        JsonManagement jsonManagement = JsonManagement.getInstance();
+        JsonManagement jsonManagement = new JsonManagement();
         jsonManagement.loadJsonData(jsonDataFile);
         ParserJson rawData = JsonIterator.deserialize(jsonManagement.getJsonData(), ParserJson.class);
         Parser data = jsonManagement.dataConverter(rawData);

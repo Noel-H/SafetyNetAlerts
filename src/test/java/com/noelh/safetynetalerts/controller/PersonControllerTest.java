@@ -1,13 +1,18 @@
 package com.noelh.safetynetalerts.controller;
 
+import com.noelh.safetynetalerts.json.JsonInitializer;
 import com.noelh.safetynetalerts.json.jsonparser.Person;
 import com.noelh.safetynetalerts.service.PersonService;
 import com.noelh.safetynetalerts.web.controller.PersonController;
 import com.noelh.safetynetalerts.web.dto.PersonUpdateRequest;
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +26,7 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,7 +40,15 @@ public class PersonControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
+    private JsonInitializer jsonInitializer;
+
+    @MockBean
     private PersonService personService;
+
+    @BeforeEach
+    public void setup() throws Exception {
+        doNothing().when(jsonInitializer).run();
+    }
 
     @Test
     public void getPersonsTest_shouldReturnOk() throws Exception {
