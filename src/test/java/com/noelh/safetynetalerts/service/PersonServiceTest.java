@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -79,12 +80,30 @@ public class PersonServiceTest {
         verify(personRepository, times(1)).save(any());
     }
 
-    //ternaire non testé
+
     @Test
     public void updatePerson_shouldReturnPerson(){
         Person p = new Person();
         Person updatedPerson = new Person();
         PersonUpdateRequest pUR = new PersonUpdateRequest();
+        when(personRepository.save(any())).thenReturn(updatedPerson);
+        personService.updatePerson(p, pUR);
+        verify(personRepository, times(1)).save(any());
+    }
+
+    //Test Ternaire
+    @Test
+    public void updatePerson_shouldReturnPersonButPersonUpdateRequestHaveData(){
+        Person p = new Person();
+        Person updatedPerson = new Person();
+        PersonUpdateRequest pUR = new PersonUpdateRequest();
+        Date date = new Date();
+        pUR.setBirthdate(date);
+        pUR.setAddress("");
+        pUR.setCity("");
+        pUR.setZip("");
+        pUR.setPhone("");
+        pUR.setEmail("");
         when(personRepository.save(any())).thenReturn(updatedPerson);
         personService.updatePerson(p, pUR);
         verify(personRepository, times(1)).save(any());

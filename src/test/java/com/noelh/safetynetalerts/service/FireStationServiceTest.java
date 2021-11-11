@@ -11,11 +11,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -67,5 +67,43 @@ public class FireStationServiceTest {
         when(fireStationRepository.save(any())).thenReturn(fsUpdated);
         fireStationService.updateFireStation(fs, fsUR);
         verify(fireStationRepository, times(1)).save(any());
+    }
+
+    @Test
+    public void deleteFireStationTest_shouldReturnFireStation(){
+        FireStation firestation = new FireStation();
+        List<String> address = new ArrayList<>();
+        firestation.setAddress(address);
+
+        doNothing().when(fireStationRepository).delete(any());
+
+        FireStation result = fireStationService.deleteFireStation(firestation);
+        verify(fireStationRepository, times(1)).delete(any());
+        assertEquals(result, firestation);
+    }
+
+    @Test
+    public void deleteFireStationAddressTest_shouldReturnFireStation(){
+        FireStation fireStation = new FireStation();
+        List<String> addressList = new ArrayList<>();
+        addressList.add("01 Address Test");
+        fireStation.setAddress(addressList);
+        String address = "01 Address Test";
+
+        when(fireStationRepository.save(any())).thenReturn(new FireStation());
+
+        fireStationService.deleteFireStationAddress(fireStation,address);
+        assertFalse(fireStation.getAddress().contains(address));
+        verify(fireStationRepository, times(1)).save(any());
+    }
+
+    @Test
+    public void deleteFireStationAddressTest_shouldThrowException(){
+        FireStation fireStation = new FireStation();
+        List<String> addressList = new ArrayList<>();
+        fireStation.setAddress(addressList);
+        String address = "01 Address Test";
+
+        assertThrows(NoSuchElementException.class, () -> fireStationService.deleteFireStationAddress(fireStation,address));
     }
 }

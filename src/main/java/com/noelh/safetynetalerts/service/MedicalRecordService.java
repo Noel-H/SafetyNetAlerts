@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -52,8 +53,8 @@ public class MedicalRecordService {
         if (medicalRecord.getMedications().isEmpty() && medicalRecord.getAllergies().isEmpty()) {
             log.warn("MedicalRecord id {} already empty", medicalRecord.getId());
         }
-        medicalRecord.getMedications().removeAll(medicalRecord.getMedications());
-        medicalRecord.getAllergies().removeAll(medicalRecord.getAllergies());
+        medicalRecord.setMedications(new ArrayList<>());
+        medicalRecord.setAllergies(new ArrayList<>());
         return medicalRecordRepository.save(medicalRecord);
     }
 }
