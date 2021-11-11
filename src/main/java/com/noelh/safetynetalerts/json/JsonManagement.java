@@ -1,6 +1,12 @@
 package com.noelh.safetynetalerts.json;
 
-import com.noelh.safetynetalerts.json.jsonparser.*;
+import com.noelh.safetynetalerts.firestation.FireStation;
+import com.noelh.safetynetalerts.firestation.FireStationJson;
+import com.noelh.safetynetalerts.medicalrecord.MedicalRecord;
+import com.noelh.safetynetalerts.medicalrecord.MedicalRecordJson;
+import com.noelh.safetynetalerts.parser.Parser;
+import com.noelh.safetynetalerts.parser.ParserJson;
+import com.noelh.safetynetalerts.person.Person;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
