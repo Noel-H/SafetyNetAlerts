@@ -1,9 +1,9 @@
 package com.noelh.safetynetalerts.json;
 
 import com.jsoniter.JsonIterator;
+import com.noelh.safetynetalerts.firestation.FireStationService;
 import com.noelh.safetynetalerts.parser.Parser;
 import com.noelh.safetynetalerts.parser.ParserJson;
-import com.noelh.safetynetalerts.firestation.FireStationService;
 import com.noelh.safetynetalerts.person.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

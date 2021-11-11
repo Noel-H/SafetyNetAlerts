@@ -1,9 +1,6 @@
 package com.noelh.safetynetalerts.medicalrecord;
 
 import com.noelh.safetynetalerts.json.JsonInitializer;
-import com.noelh.safetynetalerts.medicalrecord.MedicalRecord;
-import com.noelh.safetynetalerts.medicalrecord.MedicalRecordService;
-import com.noelh.safetynetalerts.medicalrecord.MedicalRecordController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
