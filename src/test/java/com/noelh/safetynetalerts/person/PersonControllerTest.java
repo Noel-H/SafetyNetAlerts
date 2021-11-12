@@ -32,15 +32,7 @@ public class PersonControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private JsonInitializer jsonInitializer;
-
-    @MockBean
     private PersonService personService;
-
-    @BeforeEach
-    public void setup() throws Exception {
-        doNothing().when(jsonInitializer).run();
-    }
 
     @Test
     public void getPersonsTest_shouldReturnOk() throws Exception {

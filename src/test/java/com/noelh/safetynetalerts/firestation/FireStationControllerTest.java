@@ -32,15 +32,7 @@ public class FireStationControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private JsonInitializer jsonInitializer;
-
-    @MockBean
     private FireStationService fireStationService;
-
-    @BeforeEach
-    public void setup() throws Exception {
-        doNothing().when(jsonInitializer).run();
-    }
 
     @Test
     public void getFireStationsTest_shouldReturnOk() throws Exception {
