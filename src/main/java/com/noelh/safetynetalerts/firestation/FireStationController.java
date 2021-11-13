@@ -21,7 +21,14 @@ public class FireStationController {
 
     @GetMapping("")
     public List<FireStation> getFireStations(){
-        log.info("GET /firestations/");
+        log.info("GET /firestations");
+        return fireStationService.getFireStations();
+    }
+
+    //TODO : Doit renvoyer un response entity de PersonsList
+    @GetMapping("/")
+    public List<FireStation> getPersonsListByStationId(@RequestParam(value = "stationId") Long stationId){
+        log.info("GET /firestations/?stationId=" + stationId);
         return fireStationService.getFireStations();
     }
 

@@ -73,6 +73,22 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>com/noelh/safetynetalerts/person/Person.class</exclude>
+                        <exclude>com/noelh/safetynetalerts/person/PersonJson.class</exclude>
+                        <exclude>com/noelh/safetynetalerts/firestation/FireStation.class</exclude>
+                        <exclude>com/noelh/safetynetalerts/firestation/FireStationJson.class</exclude>
+                        <exclude>com/noelh/safetynetalerts/medicalrecord/MedicalRecord.class</exclude>
+                        <exclude>com/noelh/safetynetalerts/medicalrecord/MedicalRecordJson.class</exclude>
+                        <exclude>com/noelh/safetynetalerts/parser/Parser.class</exclude>
+                        <exclude>com/noelh/safetynetalerts/parser/ParserJson.class</exclude>
+                        <exclude>com/noelh/safetynetalerts/person/dto/*.class</exclude>
+                        <exclude>com/noelh/safetynetalerts/firestation/dto/*.class</exclude>
+                        <exclude>com/noelh/safetynetalerts/medicalrecord/dto/*.class</exclude>
+                        <exclude>com/noelh/safetynetalerts/SafetyNetAlertsApplication.class</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

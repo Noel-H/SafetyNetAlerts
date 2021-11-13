@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,7 +32,7 @@ public class PersonServiceTest {
 
     @Test
     public void getPersonsTest_shouldReturnListOfPerson(){
-        when(personRepository.findAll()).thenReturn(new ArrayList<>());
+//        when(personRepository.findAll()).thenReturn(new ArrayList<>());
         personService.getPersons();
         verify(personRepository, times(1)).findAll();
     }
@@ -62,18 +63,32 @@ public class PersonServiceTest {
         assertEquals(p, result);
     }
 
+//    @Test
+//    public void getPersonByFirstNameAndLastName_souldThrowException(){
+//        when(personRepository.findByFirstNameAndLastName(anyString(),anyString())).thenReturn(Optional.empty());
+//        assertThrows(NoSuchElementException.class, () -> personService.getPerson(anyString(),anyString()));
+//    }
+
     @Test
     public void getPersonByFirstNameAndLastName_souldThrowException(){
-        when(personRepository.findByFirstNameAndLastName(anyString(),anyString())).thenReturn(Optional.empty());
-        assertThrows(NoSuchElementException.class, () -> personService.getPerson(anyString(),anyString()));
-
+        when(personRepository.findByFirstNameAndLastName(any(),any())).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> personService.getPerson(any(),any()))
+                .isInstanceOf(NoSuchElementException.class);
     }
+
+//    @Test
+//    public void addPerson_shouldReturnPerson(){
+//        Person p = new Person();
+//        PersonAddRequest pAR = new PersonAddRequest();
+//        when(personRepository.save(any())).thenReturn(p);
+//        personService.addPerson(pAR);
+//        verify(personRepository, times(1)).save(any());
+//    }
 
     @Test
     public void addPerson_shouldReturnPerson(){
-        Person p = new Person();
         PersonAddRequest pAR = new PersonAddRequest();
-        when(personRepository.save(any())).thenReturn(p);
+        when(personRepository.save(any())).thenReturn(new Person());
         personService.addPerson(pAR);
         verify(personRepository, times(1)).save(any());
     }
