@@ -1,6 +1,6 @@
 package com.noelh.safetynetalerts.url.dto;
 
-import com.noelh.safetynetalerts.person.Person;
+import com.noelh.safetynetalerts.person.dto.PersonSimplifiedResponse;
 import lombok.Data;
 
 import javax.persistence.ElementCollection;
@@ -14,5 +14,5 @@ public class FireStationUrlResponse {
     private int nbChild;
 
     @ElementCollection
-    private List<Person> urlPersonList;
+    private List<PersonSimplifiedResponse> urlPersonList;
 }
