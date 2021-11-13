@@ -20,7 +20,7 @@ public class MedicalRecordController {
 
     @GetMapping("")
     public List<MedicalRecord> getMedicalRecords(){
-        log.info("GET /medicalrecords/");
+        log.info("GET /medicalrecords");
         return medicalRecordService.getMedicalRecords();
     }
 
