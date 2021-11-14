@@ -1,5 +1,6 @@
 package com.noelh.safetynetalerts.url;
 
+import com.noelh.safetynetalerts.url.dto.ChildAlertUrlResponse;
 import com.noelh.safetynetalerts.url.dto.FireStationUrlResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Slf4j
@@ -28,5 +30,11 @@ public class UrlController {
             log.error("GET /firestations/?stationId=" + stationId + " - ERROR : " + e.getMessage());
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("childAlert/")
+    public ResponseEntity<List<ChildAlertUrlResponse>> getChildListByAddress(@RequestParam(value = "address") String address){
+        log.info("GET /childAlert/?address=" + address);
+            return ResponseEntity.ok(urlService.getChildListByAddress(address));
     }
 }

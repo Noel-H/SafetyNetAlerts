@@ -5,6 +5,7 @@ import com.noelh.safetynetalerts.firestation.FireStationService;
 import com.noelh.safetynetalerts.person.Person;
 import com.noelh.safetynetalerts.person.PersonService;
 import com.noelh.safetynetalerts.person.dto.PersonSimplifiedResponse;
+import com.noelh.safetynetalerts.url.dto.ChildAlertUrlResponse;
 import com.noelh.safetynetalerts.url.dto.FireStationUrlResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,5 +103,36 @@ public class UrlService {
         fireStationUrlResponse.setNbChild(nbChild);
 
         return fireStationUrlResponse;
+    }
+
+    public List<ChildAlertUrlResponse> getChildListByAddress(String address) {
+        List<Person> personList = personService.getPersons().stream()
+                .filter(person -> address.equals(person.getAddress()))
+                .collect(Collectors.toList());
+
+        List<Person> childList = new ArrayList<>();
+        for (Person p: personList) {
+            LocalDate birthdayDate = new java.sql.Date(p.getBirthdate().getTime()).toLocalDate();
+            Period period = Period.between(birthdayDate, LocalDate.now());
+            if (period.getYears() <= 18){
+                childList.add(p);
+            }
+        }
+
+        List<ChildAlertUrlResponse> childAlertUrlResponseList = new ArrayList<>();
+        for (Person p: childList) {
+            ChildAlertUrlResponse childAlertUrlResponse = new ChildAlertUrlResponse();
+            childAlertUrlResponse.setFirstName(p.getFirstName());
+            childAlertUrlResponse.setLastName(p.getLastName());
+            LocalDate birthdayDate = new java.sql.Date(p.getBirthdate().getTime()).toLocalDate();
+            Period period = Period.between(birthdayDate, LocalDate.now());
+            childAlertUrlResponse.setAge(period.getYears());
+            childAlertUrlResponse.setHouseholdMember(personService.getPersons().stream()
+                            .filter(person -> person.getAddress().equals(p.getAddress()))
+                    .collect(Collectors.toList()));
+            childAlertUrlResponseList.add(childAlertUrlResponse);
+        }
+
+        return childAlertUrlResponseList;
     }
 }
