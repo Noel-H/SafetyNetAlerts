@@ -15,4 +15,10 @@ public class FireStationUrlResponse {
 
     @ElementCollection
     private List<PersonSimplifiedResponse> urlPersonList;
+
+    public FireStationUrlResponse(int nbAdult, int nbChild, List<PersonSimplifiedResponse> urlPersonList) {
+        this.nbAdult = nbAdult;
+        this.nbChild = nbChild;
+        this.urlPersonList = urlPersonList;
+    }
 }
