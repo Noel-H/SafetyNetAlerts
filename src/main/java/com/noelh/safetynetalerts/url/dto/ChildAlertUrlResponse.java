@@ -15,4 +15,11 @@ public class ChildAlertUrlResponse {
 
     @ElementCollection
     private List<Person> householdMember;
+
+    public ChildAlertUrlResponse(String firstName, String lastName, int ageByBirthdate, List<Person> collect) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        age = ageByBirthdate;
+        householdMember = collect;
+    }
 }

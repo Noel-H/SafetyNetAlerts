@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -112,10 +111,10 @@ public class UrlService {
                 .collect(Collectors.toList());
 
         int nbAdult = (int)personListForThisStation.stream()
-                .filter(person -> getAgeByBirthdate(person.getBirthdate()) > 18)
+                .filter(person -> isAnAdult(getAgeByBirthdate(person.getBirthdate())))
                 .count();
         int nbChild = (int)personListForThisStation.stream()
-                .filter(person -> getAgeByBirthdate(person.getBirthdate()) <= 18)
+                .filter(person -> !isAnAdult(getAgeByBirthdate(person.getBirthdate())))
                 .count();
 
         List<PersonSimplifiedResponse> result = personListForThisStation.stream()
@@ -135,34 +134,52 @@ public class UrlService {
         return period.getYears();
     }
 
+    private boolean isAnAdult(int age){
+        return age > 18;
+    }
+
+//    public List<ChildAlertUrlResponse> getChildListByAddress(String address) {
+//        List<Person> personList = personService.getPersons().stream()
+//                .filter(person -> address.equals(person.getAddress()))
+//                .collect(Collectors.toList());
+//
+//        List<Person> childList = new ArrayList<>();
+//        for (Person p: personList) {
+//            LocalDate birthdayDate = new java.sql.Date(p.getBirthdate().getTime()).toLocalDate();
+//            Period period = Period.between(birthdayDate, LocalDate.now());
+//            if (period.getYears() <= 18){
+//                childList.add(p);
+//            }
+//        }
+//
+//        List<ChildAlertUrlResponse> childAlertUrlResponseList = new ArrayList<>();
+//        for (Person p: childList) {
+//            ChildAlertUrlResponse childAlertUrlResponse = new ChildAlertUrlResponse();
+//            childAlertUrlResponse.setFirstName(p.getFirstName());
+//            childAlertUrlResponse.setLastName(p.getLastName());
+//            LocalDate birthdayDate = new java.sql.Date(p.getBirthdate().getTime()).toLocalDate();
+//            Period period = Period.between(birthdayDate, LocalDate.now());
+//            childAlertUrlResponse.setAge(period.getYears());
+//            childAlertUrlResponse.setHouseholdMember(personService.getPersons().stream()
+//                            .filter(person -> person.getAddress().equals(p.getAddress()))
+//                    .collect(Collectors.toList()));
+//            childAlertUrlResponseList.add(childAlertUrlResponse);
+//        }
+//
+//        return childAlertUrlResponseList;
+//    }
+
     public List<ChildAlertUrlResponse> getChildListByAddress(String address) {
-        List<Person> personList = personService.getPersons().stream()
-                .filter(person -> address.equals(person.getAddress()))
+        return personService.getPersons().stream()
+                .filter(person -> person.getAddress().equals(address))
+                .filter(person -> !isAnAdult(getAgeByBirthdate(person.getBirthdate())))
+                .map(person -> new ChildAlertUrlResponse(
+                        person.getFirstName(),
+                        person.getLastName(),
+                        getAgeByBirthdate(person.getBirthdate()),
+                        personService.getPersons().stream()
+                                .filter(person1 -> person1.getAddress().equals(address))
+                                .collect(Collectors.toList())))
                 .collect(Collectors.toList());
-
-        List<Person> childList = new ArrayList<>();
-        for (Person p: personList) {
-            LocalDate birthdayDate = new java.sql.Date(p.getBirthdate().getTime()).toLocalDate();
-            Period period = Period.between(birthdayDate, LocalDate.now());
-            if (period.getYears() <= 18){
-                childList.add(p);
-            }
-        }
-
-        List<ChildAlertUrlResponse> childAlertUrlResponseList = new ArrayList<>();
-        for (Person p: childList) {
-            ChildAlertUrlResponse childAlertUrlResponse = new ChildAlertUrlResponse();
-            childAlertUrlResponse.setFirstName(p.getFirstName());
-            childAlertUrlResponse.setLastName(p.getLastName());
-            LocalDate birthdayDate = new java.sql.Date(p.getBirthdate().getTime()).toLocalDate();
-            Period period = Period.between(birthdayDate, LocalDate.now());
-            childAlertUrlResponse.setAge(period.getYears());
-            childAlertUrlResponse.setHouseholdMember(personService.getPersons().stream()
-                            .filter(person -> person.getAddress().equals(p.getAddress()))
-                    .collect(Collectors.toList()));
-            childAlertUrlResponseList.add(childAlertUrlResponse);
-        }
-
-        return childAlertUrlResponseList;
     }
 }
