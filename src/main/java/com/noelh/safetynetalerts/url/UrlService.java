@@ -251,4 +251,23 @@ public class UrlService {
                 .collect(Collectors.groupingBy(FloodStationUrlResponse::getAddress));
         return floodStationUrlResponseList;
     }
+
+    public List<PersonInfoUrlResponse> getPersonInfoByFirstNameAndLastName(String firstName, String lastName) {
+        List<PersonInfoUrlResponse> personInfoUrlResponseList = personService.getPersons().stream()
+                .filter(person -> person.getFirstName().equals(firstName)&& person.getLastName().equals(lastName))
+                .map(person -> new PersonInfoUrlResponse(
+                        person.getFirstName(),
+                        person.getLastName(),
+                        person.getAddress(),
+                        getAgeByBirthdate(person.getBirthdate()),
+                        person.getEmail(),
+                        person.getMedicalRecord()))
+                .collect(Collectors.toList());
+
+        if (personInfoUrlResponseList.isEmpty()){
+            throw new NoSuchElementException("FirstName " +firstName+ " and lastName "+lastName+ " not found");
+        }
+
+        return personInfoUrlResponseList;
+    }
 }

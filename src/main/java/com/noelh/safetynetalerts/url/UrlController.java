@@ -76,4 +76,15 @@ public class UrlController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("personInfo/")
+    public ResponseEntity<List<PersonInfoUrlResponse>> getPersonInfoByFirstNameAndLastName(@RequestParam(value = "firstName") String firstName, @RequestParam(value = "lastName") String lastName){
+        log.info("GET /personInfo/?firstName="+firstName+"&lastName="+lastName);
+        try {
+            return ResponseEntity.ok(urlService.getPersonInfoByFirstNameAndLastName(firstName, lastName));
+        } catch (NoSuchElementException e){
+            log.error("GET /personInfo/?firstName="+firstName+"&lastName="+lastName + " - ERROR : " + e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
