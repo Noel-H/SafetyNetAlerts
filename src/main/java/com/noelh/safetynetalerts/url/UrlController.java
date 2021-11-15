@@ -87,4 +87,15 @@ public class UrlController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("communityEmail/")
+    public ResponseEntity<List<CommunityEmailUrlResponse>> getMailsByCity(@RequestParam(value = "city") String city){
+        log.info("GET /communityEmail/?city=" +city);
+        try {
+            return ResponseEntity.ok(urlService.getMailsByCity(city));
+        } catch (NoSuchElementException e){
+            log.error("GET /communityEmail/?city=" +city + " - ERROR : " + e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

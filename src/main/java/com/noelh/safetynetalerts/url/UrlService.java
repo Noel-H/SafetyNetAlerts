@@ -270,4 +270,17 @@ public class UrlService {
 
         return personInfoUrlResponseList;
     }
+
+    public List<CommunityEmailUrlResponse> getMailsByCity(String city) {
+        List<CommunityEmailUrlResponse> communityEmailUrlResponseList = personService.getPersons().stream()
+                .filter(person -> person.getCity().equals(city))
+                .map(person -> new CommunityEmailUrlResponse(
+                        person.getEmail()))
+                .collect(Collectors.toList());
+
+        if (communityEmailUrlResponseList.isEmpty()){
+            throw new NoSuchElementException("No result for "+city);
+        }
+        return communityEmailUrlResponseList;
+    }
 }
