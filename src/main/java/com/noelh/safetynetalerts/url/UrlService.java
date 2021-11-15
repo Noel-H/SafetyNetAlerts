@@ -1,20 +1,19 @@
 package com.noelh.safetynetalerts.url;
 
+import com.noelh.safetynetalerts.firestation.FireStation;
 import com.noelh.safetynetalerts.firestation.FireStationService;
+import com.noelh.safetynetalerts.firestation.dto.FireStationNumberResponse;
 import com.noelh.safetynetalerts.person.Person;
 import com.noelh.safetynetalerts.person.PersonService;
 import com.noelh.safetynetalerts.person.dto.PersonSimplifiedResponse;
-import com.noelh.safetynetalerts.url.dto.ChildAlertUrlResponse;
-import com.noelh.safetynetalerts.url.dto.FireStationUrlResponse;
+import com.noelh.safetynetalerts.url.dto.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Date;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -169,9 +168,16 @@ public class UrlService {
 //        return childAlertUrlResponseList;
 //    }
 
-    public List<ChildAlertUrlResponse> getChildListByAddress(String address) {
-        return personService.getPersons().stream()
+    public List<ChildAlertUrlResponse> getChildListByAddress(String address) throws NoSuchElementException{
+        List<Person> personList = personService.getPersons().stream()
                 .filter(person -> person.getAddress().equals(address))
+                .collect(Collectors.toList());
+
+        if (personList.isEmpty()){
+            throw new NoSuchElementException("Address " + address +" not found");
+        }
+
+        return personList.stream()
                 .filter(person -> !isAnAdult(getAgeByBirthdate(person.getBirthdate())))
                 .map(person -> new ChildAlertUrlResponse(
                         person.getFirstName(),
@@ -181,5 +187,68 @@ public class UrlService {
                                 .filter(person1 -> person1.getAddress().equals(address))
                                 .collect(Collectors.toList())))
                 .collect(Collectors.toList());
+    }
+
+    public List<PhoneUrlResponse> getPhonesByStationId(Long stationId) throws NoSuchElementException{
+        return personService.getPersons().stream()
+                .filter(person -> fireStationService.getFireStation(stationId).getAddress()
+                        .contains(person.getAddress()))
+                .map(person -> new PhoneUrlResponse(
+                        person.getPhone()))
+                .collect(Collectors.toList());
+    }
+
+    public FireUrlWithStationNumberResponse getPersonAndStationNumberByAddress(String address) {
+        List<Person> personList = personService.getPersons().stream()
+                .filter(person -> person.getAddress().equals(address))
+                .collect(Collectors.toList());
+
+        if (personList.isEmpty()){
+            throw new NoSuchElementException("Address " + address +" not found");
+        }
+
+        List<FireUrlResponse> fireUrlResponseList = personService.getPersons().stream()
+                .filter(person -> person.getAddress().equals(address))
+                .map(person -> new FireUrlResponse(
+                        person.getFirstName(),
+                        person.getLastName(),
+                        person.getPhone(),
+                        getAgeByBirthdate(person.getBirthdate()),
+                        person.getMedicalRecord()))
+                .collect(Collectors.toList());
+
+        List<FireStationNumberResponse> stations = fireStationService.getFireStations().stream()
+                .filter(fireStation -> fireStation.getAddress().contains(address))
+                .map(fireStation -> new FireStationNumberResponse(
+                        fireStation.getStation()))
+                .collect(Collectors.toList());
+
+        FireUrlWithStationNumberResponse fireUrlWithStationNumberResponse = new FireUrlWithStationNumberResponse();
+        fireUrlWithStationNumberResponse.setStations(stations);
+        fireUrlWithStationNumberResponse.setFireUrlResponseList(fireUrlResponseList);
+        return fireUrlWithStationNumberResponse;
+    }
+
+    public Map<String, List<FloodStationUrlResponse>> getPersonsGroupedByAddress(List<Long> stationIdList) {
+        List<FireStation> fireStationList = new ArrayList<>();
+
+        for (long l : stationIdList) {
+            fireStationList.add(fireStationService.getFireStation(l));
+        }
+        List<String> addressList = fireStationList.stream()
+                .flatMap(fireStation -> fireStation.getAddress().stream())
+                .collect(Collectors.toList());
+
+        Map<String, List<FloodStationUrlResponse>> floodStationUrlResponseList = personService.getPersons().stream()
+                .filter(person -> addressList.contains(person.getAddress()))
+                .map(person -> new FloodStationUrlResponse(
+                        person.getAddress(),
+                        person.getFirstName(),
+                        person.getLastName(),
+                        person.getPhone(),
+                        getAgeByBirthdate(person.getBirthdate()),
+                        person.getMedicalRecord()))
+                .collect(Collectors.groupingBy(FloodStationUrlResponse::getAddress));
+        return floodStationUrlResponseList;
     }
 }
