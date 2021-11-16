@@ -28,18 +28,18 @@ class JsonManagementTest {
 
     @Disabled
     @Test
-    void getJsonData_shouldReturn_String() {
+    public void getJsonDataTest_shouldReturn_String() {
         String returnedValue = jsonManagement.getJsonData();
         assertThat(returnedValue).isEqualTo("");
     }
 
     @Disabled
     @Test
-    void loadJsonData() {
+    public void loadJsonDataTest() {
     }
 
     @Test
-    void dataConverter_shouldReturn_Parser() throws ParseException {
+    public void dataConverterTest_shouldReturn_Parser() throws ParseException {
         // given
         ParserJson parserJson = new ParserJson();
 

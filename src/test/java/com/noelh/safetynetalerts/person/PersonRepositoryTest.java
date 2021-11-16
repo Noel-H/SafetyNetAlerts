@@ -15,7 +15,7 @@ class PersonRepositoryTest {
     private PersonRepository personRepositoryUnderTest;
 
     @Test
-    void findByFirstNameAndLastName_shouldFindThisPerson() {
+    public void findByFirstNameAndLastNameTest_shouldFindThisPerson() {
         //given
         Person person = new Person();
         person.setFirstName("Slydeno");
@@ -28,7 +28,7 @@ class PersonRepositoryTest {
     }
 
     @Test
-    void findByFirstNameAndLastName_shouldNotFindThisPerson() {
+    public void findByFirstNameAndLastNameTest_shouldNotFindThisPerson() {
         //given
         //when
         Optional<Person> expected = personRepositoryUnderTest.findByFirstNameAndLastName("Slydeno","Hixo");

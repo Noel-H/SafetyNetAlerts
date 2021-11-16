@@ -58,7 +58,7 @@ public class FireStationServiceTest {
     }
 
     @Test
-    public void updateFireStation_shouldReturnFireStation(){
+    public void updateFireStationTest_shouldReturnFireStation(){
         FireStation fs = new FireStation();
         FireStation fsUpdated = new FireStation();
         FireStationUpdateRequest fsUR = new FireStationUpdateRequest();
