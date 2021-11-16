@@ -87,6 +87,7 @@
                         <exclude>com/noelh/safetynetalerts/firestation/dto/*.class</exclude>
                         <exclude>com/noelh/safetynetalerts/medicalrecord/dto/*.class</exclude>
                         <exclude>com/noelh/safetynetalerts/SafetyNetAlertsApplication.class</exclude>
+                        <exclude>com/noelh/safetynetalerts/url/dto/*.class</exclude>
                     </excludes>
                 </configuration>
             </plugin>

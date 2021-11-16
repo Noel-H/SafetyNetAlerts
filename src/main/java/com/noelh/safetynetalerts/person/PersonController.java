@@ -20,7 +20,7 @@ public class PersonController {
 
     @GetMapping("")
     public List<Person> getPersons(){
-        log.info("GET /persons/");
+        log.info("GET /persons");
         return personService.getPersons();
     }
 

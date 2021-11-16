@@ -56,7 +56,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void getPersonByFirstNameAndLastName_souldReturnPerson(){
+    public void getPersonByFirstNameAndLastNameTest_souldReturnPerson(){
         Person p = new Person();
         when(personRepository.findByFirstNameAndLastName(anyString(),anyString())).thenReturn(Optional.of(p));
         Person result = personService.getPerson(anyString(),anyString());
@@ -70,7 +70,7 @@ public class PersonServiceTest {
 //    }
 
     @Test
-    public void getPersonByFirstNameAndLastName_souldThrowException(){
+    public void getPersonByFirstNameAndLastNameTest_souldThrowException(){
         when(personRepository.findByFirstNameAndLastName(any(),any())).thenReturn(Optional.empty());
         assertThatThrownBy(() -> personService.getPerson(any(),any()))
                 .isInstanceOf(NoSuchElementException.class);
@@ -86,7 +86,7 @@ public class PersonServiceTest {
 //    }
 
     @Test
-    public void addPerson_shouldReturnPerson(){
+    public void addPersonTest_shouldReturnPerson(){
         PersonAddRequest pAR = new PersonAddRequest();
         when(personRepository.save(any())).thenReturn(new Person());
         personService.addPerson(pAR);
@@ -95,7 +95,7 @@ public class PersonServiceTest {
 
 
     @Test
-    public void updatePerson_shouldReturnPerson(){
+    public void updatePersonTest_shouldReturnPerson(){
         Person p = new Person();
         Person updatedPerson = new Person();
         PersonUpdateRequest pUR = new PersonUpdateRequest();
@@ -106,7 +106,7 @@ public class PersonServiceTest {
 
     //Test Ternaire
     @Test
-    public void updatePerson_shouldReturnPersonButPersonUpdateRequestHaveData(){
+    public void updatePersonTest_shouldReturnPersonButPersonUpdateRequestHaveData(){
         Person p = new Person();
         Person updatedPerson = new Person();
         PersonUpdateRequest pUR = new PersonUpdateRequest();

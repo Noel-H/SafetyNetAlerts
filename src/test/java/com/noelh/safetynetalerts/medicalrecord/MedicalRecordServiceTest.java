@@ -86,7 +86,7 @@ public class MedicalRecordServiceTest {
     }
 
     @Test
-    public void updateMedicalRecord_shouldReturnMedicalRecord(){
+    public void updateMedicalRecordTest_shouldReturnMedicalRecord(){
         MedicalRecord mr = new MedicalRecord();
         MedicalRecord mrUpdated = new MedicalRecord();
         MedicalRecordUpdateRequest mrUR = new MedicalRecordUpdateRequest();
