@@ -486,6 +486,92 @@ class UrlServiceTest {
 
     @Test
     public void getPersonsGroupedByAddressTest_Should_Return_MapList() {
+        // given
+        Date date = new Date();
+        date.setTime(978303600000L); // 01/01/2001
+        Date date1 = new Date();
+        date1.setTime(1355266800000L); // 12/12/2012
+        Date date2 = new Date();
+        date2.setTime(652831200000L); // 09/09/1990
+
+        MedicalRecord medicalRecord = new MedicalRecord();
+        medicalRecord.setAllergies(Arrays.asList("Pomme","Ananas"));
+        medicalRecord.setMedications(Arrays.asList("Doliprane:500mg","hydrapermazol:100mg"));
+
+        MedicalRecord medicalRecord1 = new MedicalRecord();
+        medicalRecord1.setAllergies(Arrays.asList("Banane","Poire"));
+        medicalRecord1.setMedications(Arrays.asList("Doliprane:1000mg",""));
+
+        MedicalRecord medicalRecord2 = new MedicalRecord();
+        medicalRecord2.setAllergies(Arrays.asList("Kiwi","Fraise"));
+        medicalRecord2.setMedications(Arrays.asList("aznol:350mg","hydrapermazol:100mg"));
+
+        Person person = new Person();
+        person.setId(1);
+        person.setFirstName("John");
+        person.setLastName("Doe");
+        person.setBirthdate(date);
+        person.setAddress("01 Test St");
+        person.setCity("Test city");
+        person.setZip("12345");
+        person.setPhone("0102030405");
+        person.setEmail("john.doe@email.com");
+        person.setMedicalRecord(medicalRecord);
+
+        Person person1 = new Person();
+        person1.setId(2);
+        person1.setFirstName("Peter");
+        person1.setLastName("Parker");
+        person1.setBirthdate(date1);
+        person1.setAddress("99 Wrong Av");
+        person1.setCity("Test city");
+        person1.setZip("99999");
+        person1.setPhone("0909090909");
+        person1.setEmail("peter.parker@email.com");
+        person1.setMedicalRecord(medicalRecord1);
+
+        Person person2 = new Person();
+        person2.setId(3);
+        person2.setFirstName("Lara");
+        person2.setLastName("Croft");
+        person2.setBirthdate(date2);
+        person2.setAddress("02 Test St");
+        person2.setCity("Test city");
+        person2.setZip("99999");
+        person2.setPhone("0808080808");
+        person2.setEmail("lara.croft@email.com");
+        person2.setMedicalRecord(medicalRecord2);
+
+        List<Person> personList = new ArrayList<>();
+        personList.add(person);
+        personList.add(person1);
+        personList.add(person2);
+        //
+        FireStation fireStation = new FireStation();
+        fireStation.setId(1);
+        fireStation.setStation(1);
+        fireStation.setAddress(Arrays.asList("01 Test St","02 Test St","03 Test St","04 Test St"));
+
+        FireStation fireStation1 = new FireStation();
+        fireStation1.setId(2);
+        fireStation1.setStation(2);
+        fireStation1.setAddress(Arrays.asList("05 Test St","06 Test St","07 Test St","08 Test St"));
+
+        FireStation fireStation2 = new FireStation();
+        fireStation2.setId(3);
+        fireStation2.setStation(3);
+        fireStation2.setAddress(Arrays.asList("09 Test St","10 Test St","11 Test St","12 Test St"));
+        // and given
+        //TODO
+        Map<String, List<FloodStationUrlResponse>> expectedValue = new HashMap<>();
+
+        // when
+        when(fireStationService.getFireStation(1L)).thenReturn(fireStation);
+        when(fireStationService.getFireStation(2L)).thenReturn(fireStation1);
+        when(personService.getPersons()).thenReturn(personList);
+        // then
+        Map<String, List<FloodStationUrlResponse>> result = urlService.getPersonsGroupedByAddress(Arrays.asList(1L,2L));
+        assertThat(result).isEqualTo(expectedValue);
     }
 
     @Test
