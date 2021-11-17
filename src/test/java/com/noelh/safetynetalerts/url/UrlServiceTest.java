@@ -3,13 +3,13 @@ package com.noelh.safetynetalerts.url;
 import com.noelh.safetynetalerts.firestation.FireStation;
 import com.noelh.safetynetalerts.firestation.FireStationRepository;
 import com.noelh.safetynetalerts.firestation.FireStationService;
+import com.noelh.safetynetalerts.firestation.dto.FireStationNumberResponse;
+import com.noelh.safetynetalerts.medicalrecord.MedicalRecord;
 import com.noelh.safetynetalerts.person.Person;
 import com.noelh.safetynetalerts.person.PersonRepository;
 import com.noelh.safetynetalerts.person.PersonService;
 import com.noelh.safetynetalerts.person.dto.PersonSimplifiedResponse;
-import com.noelh.safetynetalerts.url.dto.ChildAlertUrlResponse;
-import com.noelh.safetynetalerts.url.dto.FireStationUrlResponse;
-import com.noelh.safetynetalerts.url.dto.PhoneUrlResponse;
+import com.noelh.safetynetalerts.url.dto.*;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -363,6 +363,125 @@ class UrlServiceTest {
 
     @Test
     public void getPersonAndStationNumberByAddressTest_Should_Return_FireUrlWithStationNumberResponse() {
+        // given
+        Date date = new Date();
+        date.setTime(978303600000L); // 01/01/2001
+        Date date1 = new Date();
+        date1.setTime(1355266800000L); // 12/12/2012
+        Date date2 = new Date();
+        date2.setTime(652831200000L); // 09/09/1990
+
+        MedicalRecord medicalRecord = new MedicalRecord();
+        medicalRecord.setAllergies(Arrays.asList("Pomme","Ananas"));
+        medicalRecord.setMedications(Arrays.asList("Doliprane:500mg","hydrapermazol:100mg"));
+
+        MedicalRecord medicalRecord1 = new MedicalRecord();
+        medicalRecord1.setAllergies(Arrays.asList("Banane","Poire"));
+        medicalRecord1.setMedications(Arrays.asList("Doliprane:1000mg",""));
+
+        MedicalRecord medicalRecord2 = new MedicalRecord();
+        medicalRecord2.setAllergies(Arrays.asList("Kiwi","Fraise"));
+        medicalRecord2.setMedications(Arrays.asList("aznol:350mg","hydrapermazol:100mg"));
+
+        Person person = new Person();
+        person.setId(1);
+        person.setFirstName("John");
+        person.setLastName("Doe");
+        person.setBirthdate(date);
+        person.setAddress("01 Test St");
+        person.setCity("Test city");
+        person.setZip("12345");
+        person.setPhone("0102030405");
+        person.setEmail("john.doe@email.com");
+        person.setMedicalRecord(medicalRecord);
+
+        Person person1 = new Person();
+        person1.setId(2);
+        person1.setFirstName("Peter");
+        person1.setLastName("Parker");
+        person1.setBirthdate(date1);
+        person1.setAddress("99 Wrong Av");
+        person1.setCity("Test city");
+        person1.setZip("99999");
+        person1.setPhone("0909090909");
+        person1.setEmail("peter.parker@email.com");
+        person1.setMedicalRecord(medicalRecord1);
+
+        Person person2 = new Person();
+        person2.setId(3);
+        person2.setFirstName("Lara");
+        person2.setLastName("Croft");
+        person2.setBirthdate(date2);
+        person2.setAddress("02 Test St");
+        person2.setCity("Test city");
+        person2.setZip("99999");
+        person2.setPhone("0808080808");
+        person2.setEmail("lara.croft@email.com");
+        person2.setMedicalRecord(medicalRecord2);
+
+        List<Person> personList = new ArrayList<>();
+        personList.add(person);
+        personList.add(person1);
+        personList.add(person2);
+        //
+
+        FireStation fireStation = new FireStation();
+        fireStation.setId(1);
+        fireStation.setStation(1);
+        fireStation.setAddress(Arrays.asList("01 Test St","02 Test St","03 Test St","04 Test St"));
+
+        FireStation fireStation1 = new FireStation();
+        fireStation1.setId(2);
+        fireStation1.setStation(2);
+        fireStation1.setAddress(Arrays.asList("05 Test St","06 Test St","07 Test St","08 Test St"));
+
+        FireStation fireStation2 = new FireStation();
+        fireStation2.setId(3);
+        fireStation2.setStation(3);
+        fireStation2.setAddress(Arrays.asList("09 Test St","10 Test St","11 Test St","12 Test St"));
+
+        List<FireStation> fireStationList = new ArrayList<>();
+        fireStationList.add(fireStation);
+        fireStationList.add(fireStation1);
+        fireStationList.add(fireStation2);
+
+        // and given
+        FireStationNumberResponse fireStationNumberResponse = new FireStationNumberResponse(1);
+
+        FireUrlResponse fireUrlResponse = new FireUrlResponse(
+                "John",
+                "Doe",
+                "0102030405",
+                20,
+                medicalRecord);
+
+
+        List<FireStationNumberResponse> fireStationNumberResponses = new ArrayList<>();
+        fireStationNumberResponses.add(fireStationNumberResponse);
+
+        List<FireUrlResponse> fireUrlResponseList = new ArrayList<>();
+        fireUrlResponseList.add(fireUrlResponse);
+
+        FireUrlWithStationNumberResponse expectedValue = new FireUrlWithStationNumberResponse();
+        expectedValue.setStations(fireStationNumberResponses);
+        expectedValue.setFireUrlResponseList(fireUrlResponseList);
+        // when
+        when(personService.getPersons()).thenReturn(personList);
+        when(fireStationService.getFireStations()).thenReturn(fireStationList);
+        // then
+        FireUrlWithStationNumberResponse result = urlService.getPersonAndStationNumberByAddress("01 Test St");
+        assertThat(result).isEqualTo(expectedValue);
+    }
+
+    @Test
+    public void getPersonAndStationNumberByAddressTest_Should_Throw_NoSuchElementException() {
+        // given
+        List<Person> personList = new ArrayList<>();
+        // when
+        when(personService.getPersons()).thenReturn(personList);
+        // then
+        assertThatThrownBy(() -> urlService.getPersonAndStationNumberByAddress("01 Test St"))
+                .isInstanceOf(NoSuchElementException.class);
     }
 
     @Test
