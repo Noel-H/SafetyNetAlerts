@@ -29,6 +29,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.jsoniter</groupId>
             <artifactId>jsoniter</artifactId>
             <version>0.9.19</version>
@@ -88,6 +93,7 @@
                         <exclude>com/noelh/safetynetalerts/medicalrecord/dto/*.class</exclude>
                         <exclude>com/noelh/safetynetalerts/SafetyNetAlertsApplication.class</exclude>
                         <exclude>com/noelh/safetynetalerts/url/dto/*.class</exclude>
+                        <exclude>com/noelh/safetynetalerts/configuration/*.class</exclude>
                     </excludes>
                 </configuration>
             </plugin>
