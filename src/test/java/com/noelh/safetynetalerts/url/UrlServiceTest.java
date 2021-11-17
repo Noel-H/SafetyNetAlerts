@@ -620,6 +620,153 @@ class UrlServiceTest {
 
     @Test
     public void getPersonInfoByFirstNameAndLastNameTest_Should_Return_PersonInfoUrlResponseList() {
+        // given
+        Date date = new Date();
+        date.setTime(978303600000L); // 01/01/2001
+        Date date1 = new Date();
+        date1.setTime(1355266800000L); // 12/12/2012
+        Date date2 = new Date();
+        date2.setTime(652831200000L); // 09/09/1990
+
+        MedicalRecord medicalRecord = new MedicalRecord();
+        medicalRecord.setAllergies(Arrays.asList("Pomme","Ananas"));
+        medicalRecord.setMedications(Arrays.asList("Doliprane:500mg","hydrapermazol:100mg"));
+
+        MedicalRecord medicalRecord1 = new MedicalRecord();
+        medicalRecord1.setAllergies(Arrays.asList("Banane","Poire"));
+        medicalRecord1.setMedications(Arrays.asList("Doliprane:1000mg",""));
+
+        MedicalRecord medicalRecord2 = new MedicalRecord();
+        medicalRecord2.setAllergies(Arrays.asList("Kiwi","Fraise"));
+        medicalRecord2.setMedications(Arrays.asList("aznol:350mg","hydrapermazol:100mg"));
+
+        Person person = new Person();
+        person.setId(1);
+        person.setFirstName("John");
+        person.setLastName("Doe");
+        person.setBirthdate(date); // 01/01/2001 - 20 ans
+        person.setAddress("01 Test St");
+        person.setCity("Test city");
+        person.setZip("12345");
+        person.setPhone("0102030405");
+        person.setEmail("john.doe@email.com");
+        person.setMedicalRecord(medicalRecord);
+
+        Person person1 = new Person();
+        person1.setId(2);
+        person1.setFirstName("Peter");
+        person1.setLastName("Parker");
+        person1.setBirthdate(date1); // 12/12/2012 - 8 ans
+        person1.setAddress("99 Wrong Av");
+        person1.setCity("Test city");
+        person1.setZip("99999");
+        person1.setPhone("0909090909");
+        person1.setEmail("peter.parker@email.com");
+        person1.setMedicalRecord(medicalRecord1);
+
+        Person person2 = new Person();
+        person2.setId(3);
+        person2.setFirstName("Lara");
+        person2.setLastName("Croft");
+        person2.setBirthdate(date2); // 09/09/1990 - 31 ans
+        person2.setAddress("08 Test St");
+        person2.setCity("Test city");
+        person2.setZip("99999");
+        person2.setPhone("0808080808");
+        person2.setEmail("lara.croft@email.com");
+        person2.setMedicalRecord(medicalRecord2);
+
+        List<Person> personList = new ArrayList<>();
+        personList.add(person);
+        personList.add(person1);
+        personList.add(person2);
+        // and given
+
+        PersonInfoUrlResponse personInfoUrlResponse = new PersonInfoUrlResponse(
+                "John",
+                "Doe",
+                "01 Test St",
+                20,
+                "john.doe@email.com",
+                medicalRecord
+        );
+
+        List<PersonInfoUrlResponse> expectedValue = new ArrayList<>();
+        expectedValue.add(personInfoUrlResponse);
+        // when
+        when(personService.getPersons()).thenReturn(personList);
+        // then
+        List<PersonInfoUrlResponse> result = urlService.getPersonInfoByFirstNameAndLastName("John", "Doe");
+        assertThat(result).isEqualTo(expectedValue);
+    }
+
+    @Test
+    public void getPersonInfoByFirstNameAndLastNameTest_Should_Throw_NoSuchElementException() {
+        // given
+        Date date = new Date();
+        date.setTime(978303600000L); // 01/01/2001
+        Date date1 = new Date();
+        date1.setTime(1355266800000L); // 12/12/2012
+        Date date2 = new Date();
+        date2.setTime(652831200000L); // 09/09/1990
+
+        MedicalRecord medicalRecord = new MedicalRecord();
+        medicalRecord.setAllergies(Arrays.asList("Pomme","Ananas"));
+        medicalRecord.setMedications(Arrays.asList("Doliprane:500mg","hydrapermazol:100mg"));
+
+        MedicalRecord medicalRecord1 = new MedicalRecord();
+        medicalRecord1.setAllergies(Arrays.asList("Banane","Poire"));
+        medicalRecord1.setMedications(Arrays.asList("Doliprane:1000mg",""));
+
+        MedicalRecord medicalRecord2 = new MedicalRecord();
+        medicalRecord2.setAllergies(Arrays.asList("Kiwi","Fraise"));
+        medicalRecord2.setMedications(Arrays.asList("aznol:350mg","hydrapermazol:100mg"));
+
+        Person person = new Person();
+        person.setId(1);
+        person.setFirstName("Max");
+        person.setLastName("Doe");
+        person.setBirthdate(date); // 01/01/2001 - 20 ans
+        person.setAddress("01 Test St");
+        person.setCity("Test city");
+        person.setZip("12345");
+        person.setPhone("0102030405");
+        person.setEmail("john.doe@email.com");
+        person.setMedicalRecord(medicalRecord);
+
+        Person person1 = new Person();
+        person1.setId(2);
+        person1.setFirstName("Peter");
+        person1.setLastName("Parker");
+        person1.setBirthdate(date1); // 12/12/2012 - 8 ans
+        person1.setAddress("99 Wrong Av");
+        person1.setCity("Test city");
+        person1.setZip("99999");
+        person1.setPhone("0909090909");
+        person1.setEmail("peter.parker@email.com");
+        person1.setMedicalRecord(medicalRecord1);
+
+        Person person2 = new Person();
+        person2.setId(3);
+        person2.setFirstName("Lara");
+        person2.setLastName("Payne");
+        person2.setBirthdate(date2); // 09/09/1990 - 31 ans
+        person2.setAddress("08 Test St");
+        person2.setCity("Test city");
+        person2.setZip("99999");
+        person2.setPhone("0808080808");
+        person2.setEmail("lara.croft@email.com");
+        person2.setMedicalRecord(medicalRecord2);
+
+        List<Person> personList = new ArrayList<>();
+        personList.add(person);
+        personList.add(person1);
+        personList.add(person2);
+        // when
+        when(personService.getPersons()).thenReturn(personList);
+        // then
+        assertThatThrownBy(() -> urlService.getPersonInfoByFirstNameAndLastName("Max", "Payne"))
+                .isInstanceOf(NoSuchElementException.class);
     }
 
     @Test
