@@ -510,7 +510,7 @@ class UrlServiceTest {
         person.setId(1);
         person.setFirstName("John");
         person.setLastName("Doe");
-        person.setBirthdate(date);
+        person.setBirthdate(date); // 01/01/2001 - 20 ans
         person.setAddress("01 Test St");
         person.setCity("Test city");
         person.setZip("12345");
@@ -522,7 +522,7 @@ class UrlServiceTest {
         person1.setId(2);
         person1.setFirstName("Peter");
         person1.setLastName("Parker");
-        person1.setBirthdate(date1);
+        person1.setBirthdate(date1); // 12/12/2012 - 8 ans
         person1.setAddress("99 Wrong Av");
         person1.setCity("Test city");
         person1.setZip("99999");
@@ -534,8 +534,8 @@ class UrlServiceTest {
         person2.setId(3);
         person2.setFirstName("Lara");
         person2.setLastName("Croft");
-        person2.setBirthdate(date2);
-        person2.setAddress("02 Test St");
+        person2.setBirthdate(date2); // 09/09/1990 - 31 ans
+        person2.setAddress("08 Test St");
         person2.setCity("Test city");
         person2.setZip("99999");
         person2.setPhone("0808080808");
@@ -563,7 +563,35 @@ class UrlServiceTest {
         fireStation2.setAddress(Arrays.asList("09 Test St","10 Test St","11 Test St","12 Test St"));
         // and given
         //TODO
+        List<String> addresslistMap = new ArrayList<>();
+        addresslistMap.add("01 Test St");
+        addresslistMap.add("08 Test St");
+
+        FloodStationUrlResponse floodStationUrlResponse = new FloodStationUrlResponse(
+                "01 Test St",
+                "John",
+                "Doe",
+                "0102030405",
+                20,
+                medicalRecord
+        );
+        List<FloodStationUrlResponse> floodStationUrlResponseList = new ArrayList<>();
+        floodStationUrlResponseList.add(floodStationUrlResponse);
+
+        FloodStationUrlResponse floodStationUrlResponse1 = new FloodStationUrlResponse(
+                "08 Test St",
+                "Lara",
+                "Croft",
+                "0808080808",
+                31,
+                medicalRecord2
+        );
+        List<FloodStationUrlResponse> floodStationUrlResponseList1 = new ArrayList<>();
+        floodStationUrlResponseList1.add(floodStationUrlResponse1);
+
         Map<String, List<FloodStationUrlResponse>> expectedValue = new HashMap<>();
+        expectedValue.put("01 Test St",floodStationUrlResponseList);
+        expectedValue.put("08 Test St",floodStationUrlResponseList1);
 
         // when
         when(fireStationService.getFireStation(1L)).thenReturn(fireStation);
@@ -572,6 +600,22 @@ class UrlServiceTest {
         // then
         Map<String, List<FloodStationUrlResponse>> result = urlService.getPersonsGroupedByAddress(Arrays.asList(1L,2L));
         assertThat(result).isEqualTo(expectedValue);
+    }
+
+    @Test
+    public void getPersonsGroupedByAddressTest_Should_Throw_NoSuchElementException() {
+        // given
+        FireStation fireStation = new FireStation();
+        fireStation.setId(1);
+        fireStation.setStation(1);
+        fireStation.setAddress(Arrays.asList("01 Test St","02 Test St","03 Test St","04 Test St"));
+
+        // when
+        when(fireStationService.getFireStation(1L)).thenReturn(fireStation);
+        when(fireStationService.getFireStation(5L)).thenThrow(new NoSuchElementException());
+        // then
+        assertThatThrownBy(() -> urlService.getPersonsGroupedByAddress(Arrays.asList(1L,5L)))
+                .isInstanceOf(NoSuchElementException.class);
     }
 
     @Test
