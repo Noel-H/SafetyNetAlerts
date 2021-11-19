@@ -62,6 +62,7 @@ public class PersonService {
                 .zip(updatedPerson.getZip() == null ? person.getZip() : updatedPerson.getZip())
                 .phone(updatedPerson.getPhone() == null ? person.getPhone() :updatedPerson.getPhone())
                 .email(updatedPerson.getEmail() == null ? person.getEmail() : updatedPerson.getEmail())
+                .medicalRecord(person.getMedicalRecord())
                 .build());
     }
 

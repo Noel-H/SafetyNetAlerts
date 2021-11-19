@@ -17,8 +17,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,7 +30,6 @@ public class PersonServiceTest {
 
     @Test
     public void getPersonsTest_shouldReturnListOfPerson(){
-//        when(personRepository.findAll()).thenReturn(new ArrayList<>());
         personService.getPersons();
         verify(personRepository, times(1)).findAll();
     }
@@ -47,95 +44,178 @@ public class PersonServiceTest {
 
     @Test
     public void getPersonTest_shouldThrowException() {
-        //GIVEN Je prepare mon repository a renvoyer un optional vide
         when(personRepository.findById(1L)).thenReturn(Optional.empty());
-
-        //WHEN j'appelle personService.getPerson()
-        //THEN je recois une NoSuchElementException
         assertThrows(NoSuchElementException.class, () -> personService.getPerson(1));
     }
 
     @Test
     public void getPersonByFirstNameAndLastNameTest_souldReturnPerson(){
         Person p = new Person();
-        when(personRepository.findByFirstNameAndLastName(anyString(),anyString())).thenReturn(Optional.of(p));
-        Person result = personService.getPerson(anyString(),anyString());
+        when(personRepository.findByFirstNameAndLastName("John","Doe")).thenReturn(Optional.of(p));
+        Person result = personService.getPerson("John","Doe");
         assertEquals(p, result);
     }
 
-//    @Test
-//    public void getPersonByFirstNameAndLastName_souldThrowException(){
-//        when(personRepository.findByFirstNameAndLastName(anyString(),anyString())).thenReturn(Optional.empty());
-//        assertThrows(NoSuchElementException.class, () -> personService.getPerson(anyString(),anyString()));
-//    }
-
     @Test
     public void getPersonByFirstNameAndLastNameTest_souldThrowException(){
-        when(personRepository.findByFirstNameAndLastName(any(),any())).thenReturn(Optional.empty());
-        assertThatThrownBy(() -> personService.getPerson(any(),any()))
+        when(personRepository.findByFirstNameAndLastName("John","Doe")).thenReturn(Optional.empty());
+        assertThatThrownBy(() -> personService.getPerson("John","Doe"))
                 .isInstanceOf(NoSuchElementException.class);
     }
 
-//    @Test
-//    public void addPerson_shouldReturnPerson(){
-//        Person p = new Person();
-//        PersonAddRequest pAR = new PersonAddRequest();
-//        when(personRepository.save(any())).thenReturn(p);
-//        personService.addPerson(pAR);
-//        verify(personRepository, times(1)).save(any());
-//    }
-
     @Test
     public void addPersonTest_shouldReturnPerson(){
-        PersonAddRequest pAR = new PersonAddRequest();
-        when(personRepository.save(any())).thenReturn(new Person());
-        personService.addPerson(pAR);
-        verify(personRepository, times(1)).save(any());
-    }
+        Date date = new Date();
+        date.setTime(978303600000L); // 01/01/2001
+        PersonAddRequest pAR = new PersonAddRequest(
+                "John",
+                "Doe",
+                date,
+                "01 Test St",
+                "Test city",
+                "12345",
+                "0102030405",
+                "john.doe@email.com");
 
+        MedicalRecord medicalRecord = new MedicalRecord();
+        medicalRecord.setMedications(new ArrayList<>());
+        medicalRecord.setAllergies(new ArrayList<>());
+
+        Person person = new Person();
+        person.setFirstName("John");
+        person.setLastName("Doe");
+        person.setBirthdate(date);
+        person.setAddress("01 Test St");
+        person.setCity("Test city");
+        person.setZip("12345");
+        person.setPhone("0102030405");
+        person.setEmail("john.doe@email.com");
+        person.setMedicalRecord(medicalRecord);
+
+
+        when(personRepository.save(person)).thenReturn(new Person());
+        personService.addPerson(pAR);
+        verify(personRepository, times(1)).save(person);
+    }
 
     @Test
     public void updatePersonTest_shouldReturnPerson(){
-        Person p = new Person();
-        Person updatedPerson = new Person();
-        PersonUpdateRequest pUR = new PersonUpdateRequest();
-        when(personRepository.save(any())).thenReturn(updatedPerson);
-        personService.updatePerson(p, pUR);
-        verify(personRepository, times(1)).save(any());
-    }
-
-    //Test Ternaire
-    @Test
-    public void updatePersonTest_shouldReturnPersonButPersonUpdateRequestHaveData(){
-        Person p = new Person();
-        Person updatedPerson = new Person();
-        PersonUpdateRequest pUR = new PersonUpdateRequest();
         Date date = new Date();
-        pUR.setBirthdate(date);
-        pUR.setAddress("");
-        pUR.setCity("");
-        pUR.setZip("");
-        pUR.setPhone("");
-        pUR.setEmail("");
-        when(personRepository.save(any())).thenReturn(updatedPerson);
-        personService.updatePerson(p, pUR);
-        verify(personRepository, times(1)).save(any());
+        date.setTime(978303600000L); // 01/01/2001
+
+        MedicalRecord medicalRecord = new MedicalRecord();
+        medicalRecord.setMedications(new ArrayList<>());
+        medicalRecord.setAllergies(new ArrayList<>());
+
+        Person person = new Person();
+        person.setId(1L);
+        person.setFirstName("John");
+        person.setLastName("Doe");
+        person.setBirthdate(date);
+        person.setAddress("01 Test St");
+        person.setCity("Test city");
+        person.setZip("12345");
+        person.setPhone("0102030405");
+        person.setEmail("john.doe@email.com");
+        person.setMedicalRecord(medicalRecord);
+
+        Date date2 = new Date();
+        date2.setTime(652831200000L); // 09/09/1990
+
+        PersonUpdateRequest pUR = new PersonUpdateRequest();
+        pUR.setBirthdate(date2);
+        pUR.setAddress("02 High city");
+        pUR.setCity("High city");
+        pUR.setZip("77777");
+        pUR.setPhone("0707070707");
+        pUR.setEmail("alias@email.com");
+
+        Person person2 = new Person();
+        person2.setId(1L);
+        person2.setFirstName("John");
+        person2.setLastName("Doe");
+        person2.setBirthdate(date2);
+        person2.setAddress("02 High city");
+        person2.setCity("High city");
+        person2.setZip("77777");
+        person2.setPhone("0707070707");
+        person2.setEmail("alias@email.com");
+        person2.setMedicalRecord(medicalRecord);
+
+        when(personRepository.save(person2)).thenReturn(new Person());
+
+        personService.updatePerson(person, pUR);
+        verify(personRepository, times(1)).save(person2);
     }
 
+    @Test
+    public void updatePersonTest_shouldReturnPersonWithoutChange(){
+        Date date = new Date();
+        date.setTime(978303600000L); // 01/01/2001
+
+        MedicalRecord medicalRecord = new MedicalRecord();
+        medicalRecord.setMedications(new ArrayList<>());
+        medicalRecord.setAllergies(new ArrayList<>());
+
+        Person person = new Person();
+        person.setId(1L);
+        person.setFirstName("John");
+        person.setLastName("Doe");
+        person.setBirthdate(date);
+        person.setAddress("01 Test St");
+        person.setCity("Test city");
+        person.setZip("12345");
+        person.setPhone("0102030405");
+        person.setEmail("john.doe@email.com");
+        person.setMedicalRecord(medicalRecord);
+
+        Date date2 = new Date();
+        date2.setTime(652831200000L); // 09/09/1990
+
+        PersonUpdateRequest pUR = new PersonUpdateRequest();
+
+        Person person2 = new Person();
+        person2.setId(1L);
+        person2.setFirstName("John");
+        person2.setLastName("Doe");
+        person2.setBirthdate(date);
+        person2.setAddress("01 Test St");
+        person2.setCity("Test city");
+        person2.setZip("12345");
+        person2.setPhone("0102030405");
+        person2.setEmail("john.doe@email.com");
+        person2.setMedicalRecord(medicalRecord);
+
+        when(personRepository.save(person2)).thenReturn(new Person());
+
+        personService.updatePerson(person, pUR);
+        verify(personRepository, times(1)).save(person2);
+    }
 
     @Test
     public void deletePersonTest_shouldReturnPerson(){
-        MedicalRecord m = new MedicalRecord();
-        m.setMedications(new ArrayList<>());
-        m.setAllergies(new ArrayList<>());
-        Person p = new Person();
-        p.setFirstName("David");
-        p.setMedicalRecord(m);
-        doNothing().when(personRepository).delete(any());
+        Date date = new Date();
+        date.setTime(978303600000L); // 01/01/2001
 
-        Person result = personService.deletePerson(p);
+        MedicalRecord medicalRecord = new MedicalRecord();
+        medicalRecord.setMedications(new ArrayList<>());
+        medicalRecord.setAllergies(new ArrayList<>());
 
-        assertEquals("David", result.getFirstName());
-        verify(personRepository, times(1)).delete(any());
+        Person person = new Person();
+        person.setId(1L);
+        person.setFirstName("John");
+        person.setLastName("Doe");
+        person.setBirthdate(date);
+        person.setAddress("01 Test St");
+        person.setCity("Test city");
+        person.setZip("12345");
+        person.setPhone("0102030405");
+        person.setEmail("john.doe@email.com");
+        person.setMedicalRecord(medicalRecord);
+        doNothing().when(personRepository).delete(person);
+
+        personService.deletePerson(person);
+
+        verify(personRepository, times(1)).delete(person);
     }
 }
