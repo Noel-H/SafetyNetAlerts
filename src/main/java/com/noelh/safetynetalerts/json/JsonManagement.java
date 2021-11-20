@@ -7,6 +7,7 @@ import com.noelh.safetynetalerts.medicalrecord.MedicalRecordJson;
 import com.noelh.safetynetalerts.parser.Parser;
 import com.noelh.safetynetalerts.parser.ParserJson;
 import com.noelh.safetynetalerts.person.Person;
+import com.noelh.safetynetalerts.person.PersonJson;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
@@ -23,14 +24,13 @@ public class JsonManagement {
         return jsonData;
     }
 
-    public String loadJsonData(Resource jsonDataFile) throws IOException {
+    public void loadJsonData(Resource jsonDataFile) throws IOException {
         try(InputStreamReader inputStreamReader = new InputStreamReader(jsonDataFile.getInputStream())){
             int data = inputStreamReader.read();
             while(data != -1) {
                 jsonData = jsonData+(char)data;
                 data = inputStreamReader.read();
             }
-            return jsonData;
         }
     }
 
@@ -43,7 +43,7 @@ public class JsonManagement {
 
     private List<FireStation> sortFireStationList(List<FireStation> filteredFireStationList) {
         List<FireStation> sortedFireStationList = new ArrayList<>();
-        int station = 0;
+        int station;
         for (FireStation elem : filteredFireStationList) {
             FireStation fireStation = new FireStation();
             List<String> fireStationAdressList = new ArrayList<>();
@@ -60,8 +60,7 @@ public class JsonManagement {
             sortedFireStationList.add(fireStation);
         }
         LinkedHashSet<FireStation> hashSet = new LinkedHashSet<>(sortedFireStationList);
-        List<FireStation> sortedFireStationListWithoutDuplicate = new ArrayList<>(hashSet);
-        return sortedFireStationListWithoutDuplicate;
+        return new ArrayList<>(hashSet);
     }
 
     private List<FireStation> fireStationListFilter2(ParserJson rawData) {
@@ -83,8 +82,8 @@ public class JsonManagement {
         String sDate1;
         SimpleDateFormat formatter1 = new SimpleDateFormat("MM/dd/yyyy");
         Date date1 = null;
-        List<Person> personList = new ArrayList<Person>();
-        Iterator iterator = rawData.getPersons().iterator();
+        List<Person> personList = new ArrayList<>();
+        Iterator<PersonJson> iterator = rawData.getPersons().iterator();
 
         int i = 0;
 

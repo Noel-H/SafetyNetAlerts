@@ -2,7 +2,6 @@ package com.noelh.safetynetalerts.firestation;
 
 import com.noelh.safetynetalerts.firestation.dto.FireStationAddRequest;
 import com.noelh.safetynetalerts.firestation.dto.FireStationUpdateRequest;
-import com.noelh.safetynetalerts.person.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +24,6 @@ public class FireStationService {
         return fireStationRepository.findAll();
     }
 
-    /**
-     * Renvoie la firestation associée à l'id donnée
-     * @param id l'id de la firestation
-     * @return la firestation
-     * @throws NoSuchElementException si il n'y a pas de firestation avec l'id donnée
-     */
     public FireStation getFireStation(long id) throws NoSuchElementException {
         return fireStationRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("FireStation id " + id + " not found"));

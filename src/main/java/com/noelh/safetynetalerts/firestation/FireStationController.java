@@ -3,7 +3,6 @@ package com.noelh.safetynetalerts.firestation;
 import com.noelh.safetynetalerts.firestation.dto.FireStationAddRequest;
 import com.noelh.safetynetalerts.firestation.dto.FireStationDeleteAddressRequest;
 import com.noelh.safetynetalerts.firestation.dto.FireStationUpdateRequest;
-import com.noelh.safetynetalerts.person.Person;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

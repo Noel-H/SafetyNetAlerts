@@ -23,5 +23,4 @@ public class FireStation {
 
     @ElementCollection
     private List<String> address;
-
 }
