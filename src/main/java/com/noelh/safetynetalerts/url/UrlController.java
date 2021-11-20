@@ -41,7 +41,6 @@ public class UrlController {
             log.error("GET /childAlert/?address=" + address + " - ERROR : " + e.getMessage());
             return ResponseEntity.notFound().build();
         }
-
     }
 
     @GetMapping("phoneAlert/")

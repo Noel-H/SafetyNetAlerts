@@ -23,8 +23,6 @@ public class JsonInitializer implements CommandLineRunner {
     @Autowired
     private FireStationService fireStationService;
 
-
-
     @Override
     public void run(String... args) throws Exception {
         JsonManagement jsonManagement = new JsonManagement();

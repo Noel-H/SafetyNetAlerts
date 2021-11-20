@@ -53,8 +53,8 @@ public class MedicalRecordControllerTest {
         when(medicalRecordService.getMedicalRecord(anyLong())).thenReturn(mr);
         when(medicalRecordService.addMedicalRecord(eq(mr), any())).thenReturn(new MedicalRecord());
         mockMvc.perform(post("/medicalrecords/1")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{}"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
                 .andExpect(status().isOk());
     }
 
@@ -113,5 +113,4 @@ public class MedicalRecordControllerTest {
         mockMvc.perform(delete("/medicalrecords/1"))
                 .andExpect(status().isNotFound());
     }
-
 }

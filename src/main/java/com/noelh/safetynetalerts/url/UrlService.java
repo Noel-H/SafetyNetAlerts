@@ -26,83 +26,6 @@ public class UrlService {
     @Autowired
     private PersonService personService;
 
-//    public FireStationUrlResponse getPersonsListByStationIdWithoutStream(Long stationId) throws NoSuchElementException {
-//        FireStation fireStation = fireStationService.getFireStation(stationId);
-//
-//        List<String> stationAddress = fireStation.getAddress();
-//        List<Person> personList = personService.getPersons();
-//
-//        List<Person> urlPersonListResponse = new ArrayList<>();
-//        int nbAdult = 0;
-//        int nbChild = 0;
-//        for (Person p:personList) {
-//            if (stationAddress.contains(p.getAddress())){
-//                 LocalDate birthdayDate = new java.sql.Date(p.getBirthdate().getTime()).toLocalDate();
-//                Period period = Period.between(birthdayDate, LocalDate.now());
-//                if (period.getYears() <= 18){
-//                    nbChild++;
-//                } else {
-//                    nbAdult++;
-//                }
-//                urlPersonListResponse.add(p);
-//            }
-//        }
-//
-//        List<PersonSimplifiedResponse> urlPersonSimplfiedListResponse = new ArrayList<>();
-//        for (Person p: urlPersonListResponse) {
-//            PersonSimplifiedResponse personSimplifiedResponse = new PersonSimplifiedResponse();
-//            personSimplifiedResponse.setFirstName(p.getFirstName());
-//            personSimplifiedResponse.setLastName(p.getLastName());
-//            personSimplifiedResponse.setAddress(p.getAddress());
-//            personSimplifiedResponse.setPhone(p.getPhone());
-//            urlPersonSimplfiedListResponse.add(personSimplifiedResponse);
-//        }
-//
-//        FireStationUrlResponse fireStationUrlResponse = new FireStationUrlResponse();
-//        fireStationUrlResponse.setUrlPersonList(urlPersonSimplfiedListResponse);
-//        fireStationUrlResponse.setNbAdult(nbAdult);
-//        fireStationUrlResponse.setNbChild(nbChild);
-//
-//        return fireStationUrlResponse;
-//    }
-
-//    public FireStationUrlResponse getPersonsListByStationIdOriginal(Long stationId) throws NoSuchElementException {
-//
-//        List<String> stationAddress = fireStationService.getFireStation(stationId).getAddress();
-//        List<Person> personSimplifiedResponseList = personService.getPersons().stream()
-//                .filter(person -> stationAddress.contains(person.getAddress()))
-//                .collect(Collectors.toList());
-//
-//        int nbAdult = 0;
-//        int nbChild = 0;
-//        for (Person p: personSimplifiedResponseList) {
-//            LocalDate birthdayDate = new java.sql.Date(p.getBirthdate().getTime()).toLocalDate();
-//            Period period = Period.between(birthdayDate, LocalDate.now());
-//            if (period.getYears() <= 18){
-//                nbChild++;
-//            } else {
-//                nbAdult++;
-//            }
-//        }
-//
-//        List<PersonSimplifiedResponse> urlPersonSimplfiedListResponse = new ArrayList<>();
-//        for (Person p: personSimplifiedResponseList) {
-//            PersonSimplifiedResponse personSimplifiedResponse = new PersonSimplifiedResponse();
-//            personSimplifiedResponse.setFirstName(p.getFirstName());
-//            personSimplifiedResponse.setLastName(p.getLastName());
-//            personSimplifiedResponse.setAddress(p.getAddress());
-//            personSimplifiedResponse.setPhone(p.getPhone());
-//            urlPersonSimplfiedListResponse.add(personSimplifiedResponse);
-//        }
-//
-//        FireStationUrlResponse fireStationUrlResponse = new FireStationUrlResponse();
-//        fireStationUrlResponse.setUrlPersonList(urlPersonSimplfiedListResponse);
-//        fireStationUrlResponse.setNbAdult(nbAdult);
-//        fireStationUrlResponse.setNbChild(nbChild);
-//
-//        return fireStationUrlResponse;
-//    }
-
     public FireStationUrlResponse getPersonsListByStationId(Long stationId) throws NoSuchElementException {
         List<String> stationAddress = fireStationService.getFireStation(stationId).getAddress();
         List<Person> personListForThisStation = personService.getPersons().stream()
@@ -136,37 +59,6 @@ public class UrlService {
     private boolean isAnAdult(int age){
         return age > 18;
     }
-
-//    public List<ChildAlertUrlResponse> getChildListByAddress(String address) {
-//        List<Person> personList = personService.getPersons().stream()
-//                .filter(person -> address.equals(person.getAddress()))
-//                .collect(Collectors.toList());
-//
-//        List<Person> childList = new ArrayList<>();
-//        for (Person p: personList) {
-//            LocalDate birthdayDate = new java.sql.Date(p.getBirthdate().getTime()).toLocalDate();
-//            Period period = Period.between(birthdayDate, LocalDate.now());
-//            if (period.getYears() <= 18){
-//                childList.add(p);
-//            }
-//        }
-//
-//        List<ChildAlertUrlResponse> childAlertUrlResponseList = new ArrayList<>();
-//        for (Person p: childList) {
-//            ChildAlertUrlResponse childAlertUrlResponse = new ChildAlertUrlResponse();
-//            childAlertUrlResponse.setFirstName(p.getFirstName());
-//            childAlertUrlResponse.setLastName(p.getLastName());
-//            LocalDate birthdayDate = new java.sql.Date(p.getBirthdate().getTime()).toLocalDate();
-//            Period period = Period.between(birthdayDate, LocalDate.now());
-//            childAlertUrlResponse.setAge(period.getYears());
-//            childAlertUrlResponse.setHouseholdMember(personService.getPersons().stream()
-//                            .filter(person -> person.getAddress().equals(p.getAddress()))
-//                    .collect(Collectors.toList()));
-//            childAlertUrlResponseList.add(childAlertUrlResponse);
-//        }
-//
-//        return childAlertUrlResponseList;
-//    }
 
     public List<ChildAlertUrlResponse> getChildListByAddress(String address) throws NoSuchElementException{
         List<Person> personList = personService.getPersons().stream()
@@ -239,7 +131,7 @@ public class UrlService {
                 .flatMap(fireStation -> fireStation.getAddress().stream())
                 .collect(Collectors.toList());
 
-        Map<String, List<FloodStationUrlResponse>> floodStationUrlResponseList = personService.getPersons().stream()
+        return personService.getPersons().stream()
                 .filter(person -> addressList.contains(person.getAddress()))
                 .map(person -> new FloodStationUrlResponse(
                         person.getAddress(),
@@ -249,7 +141,6 @@ public class UrlService {
                         getAgeByBirthdate(person.getBirthdate()),
                         person.getMedicalRecord()))
                 .collect(Collectors.groupingBy(FloodStationUrlResponse::getAddress));
-        return floodStationUrlResponseList;
     }
 
     public List<PersonInfoUrlResponse> getPersonInfoByFirstNameAndLastName(String firstName, String lastName) {
