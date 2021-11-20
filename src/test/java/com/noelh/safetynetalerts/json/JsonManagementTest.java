@@ -8,7 +8,6 @@ import com.noelh.safetynetalerts.parser.Parser;
 import com.noelh.safetynetalerts.parser.ParserJson;
 import com.noelh.safetynetalerts.person.Person;
 import com.noelh.safetynetalerts.person.PersonJson;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -26,21 +25,8 @@ class JsonManagementTest {
 
     JsonManagement jsonManagement = new JsonManagement();
 
-    @Disabled
-    @Test
-    public void getJsonDataTest_shouldReturn_String() {
-        String returnedValue = jsonManagement.getJsonData();
-        assertThat(returnedValue).isEqualTo("");
-    }
-
-    @Disabled
-    @Test
-    public void loadJsonDataTest() {
-    }
-
     @Test
     public void dataConverterTest_shouldReturn_Parser() throws ParseException {
-        // given
         ParserJson parserJson = new ParserJson();
 
         List<PersonJson> personJsonList = new ArrayList<>();
@@ -82,7 +68,6 @@ class JsonManagementTest {
         medicalRecordJsonList.add(medicalRecordJson);
         parserJson.setMedicalrecords(medicalRecordJsonList);
 
-        //and given
         Parser parser = new Parser();
 
         List<Person> personList = new ArrayList<>();
@@ -115,10 +100,8 @@ class JsonManagementTest {
         fireStationList.add(fireStation);
         parser.setFireStations(fireStationList);
 
-        // when
         Parser returnedValue = jsonManagement.dataConverter(parserJson);
 
-        // then
         assertThat(returnedValue).isEqualTo(parser);
     }
 }

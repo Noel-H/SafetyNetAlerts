@@ -59,75 +59,57 @@ public class PersonControllerTest {
 
     @Test
     public void updatePersonTest_shouldReturnOK() throws Exception {
-        //Given
         Person p = new Person();
         when(personService.getPerson(anyLong())).thenReturn(p);
         when(personService.updatePerson(eq(p), any())).thenReturn(new Person());
-        //WHEN
         mockMvc.perform(put("/persons/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}"))
-                //THEN
                 .andExpect(status().isOk());
     }
 
     @Test
     public void updatePersonTest_shouldReturnNotFound() throws Exception {
-        //Given étant que je veux mettre a jour une personne qui n'existe pas
         when(personService.getPerson(anyLong())).thenThrow(new NoSuchElementException());
-        //When je fait un put sur l'id en question
         mockMvc.perform(put("/persons/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}"))
-        //Then je reçois une 404
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void deletePersonTest_shouldReturnOk() throws Exception {
-        //Given étant donné que j'éssaie de supprimer une person dont l'id existe
         Person p = new Person();
         when(personService.getPerson(anyLong())).thenReturn(p);
         when(personService.deletePerson(eq(p))).thenReturn(new Person());
-        //When je fait un delete sur l'id en question
         mockMvc.perform(delete("/persons/1"))
-        //Then je reçois 200
                 .andExpect(status().isOk());
     }
 
     @Test
     public void deletePersonTest_shouldReturnNotFound() throws Exception {
-//Given étant donné que j'éssaie de supprimer une person dont l'id n'existe pas
         when(personService.getPerson(anyLong())).thenThrow(new NoSuchElementException());
-        //When  je fait un delete sur l'id en question
         mockMvc.perform(delete("/persons/1"))
-                //Then je reçois 404
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void deletePersonByNameTest_shouldReturnOk() throws Exception {
-        //Given que j'éssai de supprimer une person dont le nom et prénom existe
         Person p = new Person();
         when(personService.getPerson(any(), any())).thenReturn(p);
         when(personService.deletePerson(eq(p))).thenReturn(new Person());
-        //When je fais un delete avec le nom et prénom de cette person
         mockMvc.perform(delete("/persons")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{}"))
-        //Then je reçois 200
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void deletePersonByNameTest_shouldReturnNotFound() throws Exception {
-        //Given que j'éssai de supprimer une person qui n'existe pas avec le nom et prénom
         when(personService.getPerson(any(),any())).thenThrow(new NoSuchElementException());
-        //When je fais un delete avec le nom et prénom de cette person
         mockMvc.perform(delete("/persons")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}"))
-        //Then je reçois un 404
                 .andExpect(status().isNotFound());
     }
 }

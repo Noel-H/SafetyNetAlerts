@@ -30,117 +30,87 @@ public class FireStationControllerTest {
 
     @Test
     public void getFireStationsTest_shouldReturnOk() throws Exception {
-        //Given que j'essai d'obtenir la liste des stations
         when(fireStationService.getFireStations()).thenReturn(new ArrayList<>());
-        //When je demande la liste
         mockMvc.perform(get("/firestations"))
-                //Then je reçois un 200
                 .andExpect(status().isOk());
     }
 
     @Test
     public void getFireStationTest_shouldReturnOk() throws Exception {
-        //Given que j'éssaie d'obtenir une firestation grace à un id
         when(fireStationService.getFireStation(anyLong())).thenReturn(new FireStation());
-        //When je fais la demande
         mockMvc.perform(get("/firestations/1"))
-                //Then je reçois un ok
                 .andExpect(status().isOk());
     }
 
     @Test
     public void getFireStationTest_shouldReturnNotFound() throws Exception {
-        //Given que j'éssaie d'obtenir une firestation grace à un id érroné
         when(fireStationService.getFireStation(anyLong())).thenThrow(new NoSuchElementException());
-        //When je fais la demande
         mockMvc.perform(get("/firestations/1"))
-                //Then je reçois un ok
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void addFireStationTest_shouldReturnOk() throws Exception {
-        //Given que j'éssaie d'ajouter une firestation
         when(fireStationService.addFireStation(any())).thenReturn(new FireStation());
-        //When je fais la demande
         mockMvc.perform(post("/firestations")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}"))
-                //Then je reçois un ok
                 .andExpect(status().isOk());
     }
 
     @Test
     public void updateFireStationTest_shouldReturnOk() throws Exception {
-        //Given que j'éssaie de modifier une firestation
         FireStation f = new FireStation();
         when(fireStationService.getFireStation(anyLong())).thenReturn(f);
         when(fireStationService.updateFireStation(eq(f),any())).thenReturn(new FireStation());
-        //When je fais la demande
         mockMvc.perform(put("/firestations/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}"))
-                //Then je reçois un ok
                 .andExpect(status().isOk());
     }
 
     @Test
     public void updateFireStationTest_shouldReturnNotFound() throws Exception {
-        //Given que j'éssaie d'ajouter une firestation
         when(fireStationService.getFireStation(anyLong())).thenThrow(new NoSuchElementException());
-        //When je fais la demande
         mockMvc.perform(put("/firestations/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}"))
-                //Then je reçois un ok
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void deleteFireStationTest_shouldReturnOk() throws Exception {
-        //Given que j'éssaie de modifier une firestation
         FireStation f = new FireStation();
         when(fireStationService.getFireStation(anyLong())).thenReturn(f);
         when(fireStationService.deleteFireStation(eq(f))).thenReturn(new FireStation());
-        //When je fais la demande
         mockMvc.perform(delete("/firestations/1"))
-                //Then je reçois un ok
                 .andExpect(status().isOk());
     }
 
     @Test
     public void deleteFireStationTest_shouldReturnNotFound() throws Exception {
-        //Given que j'éssaie de modifier une firestation
         when(fireStationService.getFireStation(anyLong())).thenThrow(new NoSuchElementException());
-        //When je fais la demande
         mockMvc.perform(delete("/firestations/1"))
-                //Then je reçois un ok
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void deleteFireStationAddressTest_shouldReturnOk() throws Exception {
-        //Given que j'éssaie de modifier une firestation
         FireStation f = new FireStation();
         when(fireStationService.getFireStation(anyLong())).thenReturn(f);
         when(fireStationService.deleteFireStationAddress(eq(f), any())).thenReturn(new FireStation());
-        //When je fais la demande
         mockMvc.perform(delete("/firestations/1/address")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}"))
-                //Then je reçois un ok
                 .andExpect(status().isOk());
     }
 
     @Test
     public void deleteFireStationAddressTest_shouldReturnNotFound() throws Exception {
-        //Given que j'éssaie de modifier une firestation
         when(fireStationService.getFireStation(anyLong())).thenThrow(new NoSuchElementException());
-        //When je fais la demande
         mockMvc.perform(delete("/firestations/1/address")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}"))
-                //Then je reçois un ok
                 .andExpect(status().isNotFound());
     }
 }
