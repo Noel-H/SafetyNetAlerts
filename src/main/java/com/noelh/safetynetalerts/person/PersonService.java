@@ -10,30 +10,59 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * Get persons related feature
+ */
 @Service
 public class PersonService {
 
     @Autowired
     private PersonRepository personRepository;
 
+    /**
+     * Add a list persons
+     * @param persons is a list of person
+     * @return will save the data
+     */
     public List<Person> addPersons(List<Person> persons) {
         return personRepository.saveAll(persons);
     }
 
+    /**
+     * Get a list of person
+     * @return a list of person
+     */
     public List<Person> getPersons(){
         return personRepository.findAll();
     }
 
+    /**
+     * Get a person by his id
+     * @param id is the id of a person
+     * @return a Person
+     * @throws NoSuchElementException if the id don't exist
+     */
     public Person getPerson(long id) throws NoSuchElementException {
         return personRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Person id " + id + " not found"));
     }
 
+    /**
+     * Get a person by his firstname and his lastname
+     * @param firstName is the person firstname
+     * @param lastName is the person lasttname
+     * @return a Person or a NoSuchElementException if the person is not found
+     */
     public Person getPerson(String firstName, String lastName) {
         return personRepository.findByFirstNameAndLastName(firstName, lastName)
                 .orElseThrow(() -> new NoSuchElementException("There is no person called " + firstName + " " + lastName));
     }
 
+    /**
+     * Add a person
+     * @param person is the person
+     * @return a Person and save it to the personRepository
+     */
     public Person addPerson(PersonAddRequest person) {
         return personRepository.save(Person.builder()
                 .firstName(person.getFirstName())
@@ -51,6 +80,12 @@ public class PersonService {
                 .build());
     }
 
+    /**
+     * Update a person
+     * @param person is the person who will be updated
+     * @param updatedPerson is the update of that person
+     * @return a Person and save it to the personRepository
+     */
     public Person updatePerson(Person person, PersonUpdateRequest updatedPerson) {
         return personRepository.save(Person.builder()
                 .id(person.getId())
@@ -66,6 +101,11 @@ public class PersonService {
                 .build());
     }
 
+    /**
+     * Delete a person
+     * @param person is the person
+     * @return the person
+     */
     public Person deletePerson(Person person) {
         Person result = Person.builder()
                 .id(person.getId())

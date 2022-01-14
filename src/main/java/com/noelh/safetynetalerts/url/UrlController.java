@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+/**
+ * Contains URL related possible response
+ */
 @Slf4j
 @RestController
 @RequestMapping("/")
@@ -21,6 +24,11 @@ public class UrlController {
     @Autowired
     private UrlService urlService;
 
+    /**
+     * Get a list of persons by a station id
+     * @param stationId is the station id
+     * @return a response entity ok or not found if a NoSuchElementException is caught
+     */
     @GetMapping("firestations/")
     public ResponseEntity<FireStationUrlResponse> getPersonsListByStationId(@RequestParam(value = "stationId") Long stationId){
         log.info("GET /firestations/?stationId=" + stationId);
@@ -32,6 +40,12 @@ public class UrlController {
         }
     }
 
+
+    /**
+     * Get a list of child by an address
+     * @param address is the address
+     * @return a response entity ok or not found if a NoSuchElementException is caught
+     */
     @GetMapping("childAlert/")
     public ResponseEntity<List<ChildAlertUrlResponse>> getChildListByAddress(@RequestParam(value = "address") String address){
         log.info("GET /childAlert/?address=" + address);
@@ -43,6 +57,11 @@ public class UrlController {
         }
     }
 
+    /**
+     * Get phones number by station id
+     * @param stationId is the station id
+     * @return a response entity ok or not found if a NoSuchElementException is caught
+     */
     @GetMapping("phoneAlert/")
     public ResponseEntity<List<PhoneUrlResponse>> getPhonesByStationId(@RequestParam(value = "firestation") Long stationId){
         log.info("GET /phoneAlert/?firestation=" + stationId);
@@ -54,6 +73,11 @@ public class UrlController {
         }
     }
 
+    /**
+     * Get a person and station number by an address
+     * @param address is the address
+     * @return a response entity ok or not found if a NoSuchElementException is caught
+     */
     @GetMapping("fire/")
     public ResponseEntity<FireUrlWithStationNumberResponse> getPersonAndStationNumberByAdress(@RequestParam(value = "address") String address){
         log.info("GET /fire/?address=" + address);
@@ -65,6 +89,11 @@ public class UrlController {
         }
     }
 
+    /**
+     * Get a list of persons grouped by address
+     * @param stationIdList is the list of station id
+     * @return a response entity ok or not found if a NoSuchElementException is caught
+     */
     @GetMapping("flood/stations/")
     public ResponseEntity<Map<String, List<FloodStationUrlResponse>>> getPersonsGroupedByAddress(@RequestParam(value = "stations") List<Long> stationIdList){
         log.info("GET /flood/stations/?stations=" + stationIdList);
@@ -76,6 +105,12 @@ public class UrlController {
         }
     }
 
+    /**
+     * Get a person info by his firstname and lastname
+     * @param firstName is the firstname
+     * @param lastName is the lastname
+     * @return a response entity ok or not found if a NoSuchElementException is caught
+     */
     @GetMapping("personInfo/")
     public ResponseEntity<List<PersonInfoUrlResponse>> getPersonInfoByFirstNameAndLastName(@RequestParam(value = "firstName") String firstName, @RequestParam(value = "lastName") String lastName){
         log.info("GET /personInfo/?firstName="+firstName+"&lastName="+lastName);
@@ -87,6 +122,11 @@ public class UrlController {
         }
     }
 
+    /**
+     * Get a list of mail address by a city
+     * @param city is the city
+     * @return a response entity ok or not found if a NoSuchElementException is caught
+     */
     @GetMapping("communityEmail/")
     public ResponseEntity<List<CommunityEmailUrlResponse>> getMailsByCity(@RequestParam(value = "city") String city){
         log.info("GET /communityEmail/?city=" +city);

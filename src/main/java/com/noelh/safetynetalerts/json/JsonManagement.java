@@ -16,14 +16,26 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * Manage json data
+ */
 public class JsonManagement {
 
     private String jsonData="";
 
+    /**
+     * Get a json data
+     * @return a String who contains the json data
+     */
     public String getJsonData() {
         return jsonData;
     }
 
+    /**
+     * Load a json data
+     * @param jsonDataFile is th json data who'll be loaded
+     * @throws IOException if the data can't be read
+     */
     public void loadJsonData(Resource jsonDataFile) throws IOException {
         try(InputStreamReader inputStreamReader = new InputStreamReader(jsonDataFile.getInputStream())){
             int data = inputStreamReader.read();
@@ -34,6 +46,12 @@ public class JsonManagement {
         }
     }
 
+    /**
+     * Convert the data
+     * @param rawData is the original data
+     * @return the modified data
+     * @throws ParseException if the data can't be parsed
+     */
     public Parser dataConverter(ParserJson rawData) throws ParseException {
         Parser data = new Parser();
         data.setPersons(personListFilter2(rawData));
@@ -41,6 +59,11 @@ public class JsonManagement {
         return data;
     }
 
+    /**
+     * Sort a list of firestation
+     * @param filteredFireStationList is the list of firestation
+     * @return a sorted list of firestation
+     */
     private List<FireStation> sortFireStationList(List<FireStation> filteredFireStationList) {
         List<FireStation> sortedFireStationList = new ArrayList<>();
         int station;
@@ -63,6 +86,11 @@ public class JsonManagement {
         return new ArrayList<>(hashSet);
     }
 
+    /**
+     *  Filter a list of firestation
+     * @param rawData is an original json data
+     * @return a filtered list of firestation
+     */
     private List<FireStation> fireStationListFilter2(ParserJson rawData) {
         List<FireStation> fireStationList = new ArrayList<>();
         for (FireStationJson elem: rawData.getFirestations()) {
@@ -77,6 +105,12 @@ public class JsonManagement {
         return sortFireStationList(fireStationList);
     }
 
+    /**
+     * Filter a list of person
+     * @param rawData is an original json data
+     * @return a filtered list of person
+     * @throws ParseException if the data can't be parsed
+     */
     private List<Person> personListFilter2(ParserJson rawData) throws ParseException {
 
         String sDate1;
@@ -112,6 +146,13 @@ public class JsonManagement {
         return personList;
     }
 
+    /**
+     * Find a medical record by a firstame and lastname
+     * @param rawData is an original json data
+     * @param firstName is the firstname who'll be looked for
+     * @param lastName is the lastname who'll be looked for
+     * @return a medical record
+     */
     private MedicalRecord findMedicalRecordByFirstNameAndLastName(ParserJson rawData, String firstName, String lastName) {
         MedicalRecord medicalRecord = new MedicalRecord();
         for (MedicalRecordJson elem : rawData.getMedicalrecords()) {
@@ -124,6 +165,13 @@ public class JsonManagement {
         return null;
     }
 
+    /**
+     * Find a birthday by a firstname and lastname
+     * @param rawData is an original json data
+     * @param firstName is the firstname who'll be looked for
+     * @param lastName is the lastname who'll be looked for
+     * @return a String of the birthday
+     */
     private String findBirthdayByFirstNameAndLastName(ParserJson rawData, String firstName, String lastName) {
         for (MedicalRecordJson elem : rawData.getMedicalrecords()) {
             if (elem.getFirstName().equals(firstName) && elem.getLastName().equals(lastName)){

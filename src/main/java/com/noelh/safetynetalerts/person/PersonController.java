@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * Contains person related possible response
+ */
 @Slf4j
 @RestController
 @RequestMapping("/persons")
@@ -18,12 +21,21 @@ public class PersonController {
     @Autowired
     private PersonService personService;
 
+    /**
+     * Get a list of person
+     * @return a list of person
+     */
     @GetMapping("")
     public List<Person> getPersons(){
         log.info("GET /persons");
         return personService.getPersons();
     }
 
+    /**
+     * Get a person by his id
+     * @param id is the person id
+     * @return a response entity ok or not found if a NoSuchElementException is caught
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Person> getPerson(@PathVariable("id") Long id){
         log.info("GET /persons/" + id);
@@ -35,12 +47,23 @@ public class PersonController {
         }
     }
 
+    /**
+     * Add a person
+     * @param person is the person
+     * @return a response entity ok
+     */
     @PostMapping("")
     public ResponseEntity<Person> addPerson(@RequestBody PersonAddRequest person){
         log.info("POST /persons/ : " + person.getFirstName() + " " + person.getLastName());
         return ResponseEntity.ok(personService.addPerson(person));
     }
 
+    /**
+     * Update a person
+     * @param id is the person id
+     * @param person is the updated person info
+     * @return a response entity ok or not found if a NoSuchElementException is caught
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Person> updatePerson(@PathVariable("id") Long id,@RequestBody PersonUpdateRequest person){
         log.info("PUT /persons/" + id);
@@ -52,6 +75,11 @@ public class PersonController {
         }
     }
 
+    /**
+     * Delete a person
+     * @param id is the person id
+     * @return a response entity ok or not found if a NoSuchElementException is caught
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Person> deletePerson(@PathVariable("id") Long id){
         log.info("DELETE /persons/" + id);
@@ -63,6 +91,11 @@ public class PersonController {
         }
     }
 
+    /**
+     * Delete a person by his firstname and lastname
+     * @param person is the PersonDeleteRequest who contains a firstname and lastname of a person
+     * @return a response entity ok or not found if a NoSuchElementException is caught
+     */
     @DeleteMapping("")
     public ResponseEntity<Person> deletePersonByName(@RequestBody PersonDeleteRequest person){
         log.info("DELETE /persons/ : " + person.getFirstName() + " " + person.getLastName());

@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * Contains medical record possible response
+ */
 @Slf4j
 @RestController
 @RequestMapping("/medicalrecords")
@@ -18,12 +21,21 @@ public class MedicalRecordController {
     @Autowired
     private MedicalRecordService medicalRecordService;
 
+    /**
+     * Get a list of Medical Record
+     * @return a list of medical record
+     */
     @GetMapping("")
     public List<MedicalRecord> getMedicalRecords(){
         log.info("GET /medicalrecords");
         return medicalRecordService.getMedicalRecords();
     }
 
+    /**
+     * Get a medical record by an id
+     * @param id is the id of the medical record
+     * @return a response entity ok or not found if a NoSuchElementException is caught
+     */
     @GetMapping("/{id}")
     public ResponseEntity<MedicalRecord> getMedicalRecord(@PathVariable("id") Long id){
         log.info("GET /medicalrecords/"+ id);
@@ -35,6 +47,12 @@ public class MedicalRecordController {
         }
     }
 
+    /**
+     * Add a medical record
+     * @param id is the id who'll get a medical record
+     * @param medicalRecordAddRequest is the medical record who'll be added
+     * @return a response entity ok or bad request if an IllegalArgumentException is caught or not found if a NoSuchElementException is caught
+     */
     @PostMapping("/{id}")
     public ResponseEntity<MedicalRecord> addMedicalRecord(@PathVariable("id") Long id, @RequestBody MedicalRecordAddRequest medicalRecordAddRequest){
         log.info("POST /medicalrecords/" + id);
@@ -49,6 +67,12 @@ public class MedicalRecordController {
         }
     }
 
+    /**
+     * Update a medical record
+     * @param id is the id of the medical record who'll be updated
+     * @param medicalRecordUpdateRequest is the medical record update info
+     * @return a response entity ok or not found if a NoSuchElementException is caught
+     */
     @PutMapping("/{id}")
     public ResponseEntity<MedicalRecord> updateMedicalRecord(@PathVariable("id") Long id, @RequestBody MedicalRecordUpdateRequest medicalRecordUpdateRequest){
         log.info("PUT /medicalrecords/" + id);
@@ -60,6 +84,11 @@ public class MedicalRecordController {
         }
     }
 
+    /**
+     * Delete a medical record
+     * @param id is the id of the medical record who'll be deleted
+     * @return a response entity ok or not found if a NoSuchElementException is caught
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<MedicalRecord> deleteMedicalRecord(@PathVariable("id") Long id){
         log.info("DELETE /medicalrecords/" +id);
