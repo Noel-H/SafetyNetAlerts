@@ -11,7 +11,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
-
+/**
+ * Load json data into the database
+ */
 @Component
 public class JsonInitializer implements CommandLineRunner {
     @Value("${jsonfile}")
